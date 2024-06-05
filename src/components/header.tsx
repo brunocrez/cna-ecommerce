@@ -1,5 +1,7 @@
+import Image from 'next/image'
 import { useState } from 'react'
 import { Input } from './ui/input'
+import { Separator } from './ui/separator'
 import {
   Bars3Icon,
   ShoppingBagIcon,
@@ -9,9 +11,8 @@ import {
   UserIcon,
   ShoppingCartIcon,
 } from '@heroicons/react/24/outline'
-import { Separator } from './ui/separator'
 import { Menu } from './menu'
-import Image from 'next/image'
+import { Container } from './container'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -24,9 +25,9 @@ export function Header() {
     <>
       {/* screens over 1024px */}
       <div className="hidden lg:flex bg-slate-900 relative px-3 py-6">
-        <div className="w-full max-w-[1536px] mx-auto">
+        <Container>
           <div className="flex items-center justify-between gap-6">
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-6 flex-1">
               <Bars3Icon
                 className="size-8 text-white cursor-pointer self-center"
                 onClick={handleClickMenu}
@@ -44,7 +45,7 @@ export function Header() {
               <Input
                 type="text"
                 placeholder="Buscar um produto"
-                className="w-full max-w-[692px] flex-1"
+                className="w-full max-w-[692px]"
               />
             </div>
             <div className="flex items-center gap-7 text-gray-300">
@@ -54,7 +55,7 @@ export function Header() {
               <ShoppingBagIcon className="size-8 cursor-pointer" />
             </div>
           </div>
-        </div>
+        </Container>
       </div>
 
       {/* max-width: 1024px */}
