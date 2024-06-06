@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from './ui/input'
 import { Separator } from './ui/separator'
 import {
@@ -15,16 +15,28 @@ import { Menu } from './menu'
 import { Container } from './container'
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
 
   const handleClickMenu = () => {
-    setIsMenuOpen((prevState) => !prevState)
+    setIsVisible((prevState) => !prevState)
   }
+
+  useEffect(() => {
+    if (isVisible) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isVisible])
 
   return (
     <>
       {/* screens over 1024px */}
-      <div className="hidden lg:flex bg-slate-900 relative px-3 py-6">
+      <div className="hidden lg:flex bg-slate-900 px-3 py-6">
         <Container>
           <div className="flex items-center justify-between gap-6">
             <div className="flex items-center gap-6 flex-1">
@@ -59,7 +71,7 @@ export function Header() {
       </div>
 
       {/* max-width: 1024px */}
-      <div className="hidden lg:hidden md:flex flex-col gap-4 bg-slate-900 relative px-3 py-5">
+      <div className="hidden lg:hidden md:flex flex-col gap-4 bg-slate-900 px-3 py-5">
         <div className="flex justify-between items-center">
           <Bars3Icon
             className="size-8 text-white cursor-pointer"
@@ -86,7 +98,7 @@ export function Header() {
       </div>
 
       {/* max-width: 768px */}
-      <div className="md:hidden flex items-center justify-between gap-2 px-3 py-5 bg-slate-900 relative">
+      <div className="md:hidden flex items-center justify-between gap-2 px-3 py-5 bg-slate-900">
         <Bars3Icon
           className="size-8 text-white cursor-pointer"
           onClick={handleClickMenu}
@@ -107,8 +119,8 @@ export function Header() {
       </div>
 
       <div
-        className={`py-6 px-3 absolute z-10 top-0 w-full max-w-80 h-full flex flex-col transition-all duration-500 bg-slate-900 ${
-          isMenuOpen ? 'left-0' : '-left-full'
+        className={`py-6 px-3 absolute z-30 top-0 w-full max-w-80 h-full flex flex-col transition-all duration-500 bg-slate-900 ${
+          isVisible ? 'left-0' : '-left-full'
         }`}
       >
         <div className="flex items-center justify-between">
@@ -124,6 +136,15 @@ export function Header() {
         <Separator className="my-6 bg-slate-700" />
         <Menu />
       </div>
+
+      {/* overlay */}
+      <div
+        className={`${
+          isVisible
+            ? 'fixed top-0 left-0 w-full h-full bg-black bg-opacity-20 z-20'
+            : ''
+        }`}
+      ></div>
     </>
   )
 }
