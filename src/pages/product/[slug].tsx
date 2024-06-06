@@ -6,6 +6,9 @@ import {
   ShoppingCartIcon,
   UserCircleIcon,
   ArrowRightCircleIcon,
+  StarIcon,
+  HandThumbUpIcon,
+  HandThumbDownIcon,
 } from '@heroicons/react/24/outline'
 import { Header } from '@/components/header'
 import {
@@ -15,12 +18,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Footer } from '@/components/footer'
 import { Container } from '@/components/container'
+import { Progress } from '@/components/ui/progress'
 
 export default function ProductPage() {
   const router = useRouter()
@@ -75,7 +79,7 @@ export default function ProductPage() {
               <p className="text-gray-300 text-sm mb-4">
                 Vendido por:{' '}
                 <span className="font-bold underline text-white">
-                  Simple Ecommerce
+                  Simple E-commerce
                 </span>
               </p>
               <p className="text-gray-400 line-through text-2xl">R$ 799,99</p>
@@ -135,9 +139,8 @@ export default function ProductPage() {
 
           <Separator className="my-6 bg-slate-700" />
 
-          {/* product info & comments */}
           <section>
-            <h2 className="text-white font-bold mb-2 text-lg">
+            <h2 className="text-white font-bold mb-4 text-lg">
               Descrição do Produto
             </h2>
             <p className="text-white md:text-lg">
@@ -153,35 +156,99 @@ export default function ProductPage() {
               cupiditate porro. Reprehenderit maiores nisi facere numquam soluta
               animi voluptate possimus, ratione dolore autem veniam quibusdam
               sequi? Laborum reprehenderit a dolores cumque repellat quam odio,
-              voluptatum aperiam.
+              voluptatum aperiam. Lorem, ipsum dolor sit amet consectetur
+              adipisicing elit. Facilis, omnis illo perspiciatis possimus
+              tenetur fugit, quis nulla, suscipit modi sequi culpa rem earum
+              itaque ullam doloribus! Blanditiis vitae velit reprehenderit ipsum
+              ducimus provident nihil quas, dolorem eum dicta molestiae, ad,
+              aspernatur perferendis inventore dolores ea nostrum iure
+              recusandae eos quae ullam! Facilis dolorum dicta repudiandae ipsa
+              iste possimus nihil necessitatibus perspiciatis voluptatum error
+              quam voluptatem repellendus, consectetur pariatur distinctio
+              quibusdam laboriosam aspernatur illo ipsam. Quae distinctio aut
+              blanditiis reiciendis maxime itaque architecto fugit eaque ullam
+              accusamus voluptate vero quia harum quas nisi explicabo, dolores
+              neque excepturi, ipsa similique iure doloribus.
             </p>
 
             <Separator className="my-6 bg-slate-700" />
 
-            <h2 className="text-white font-bold mb-4">
+            <h2 className="text-white font-bold mb-4 text-lg">
               Avaliação dos Usuários
             </h2>
-            {Array.from({ length: 3 }).map((_, idx) => (
-              <Card key={idx} className="bg-slate-600 border-none mb-6">
-                <CardHeader className="py-4">
-                  <div className="flex items-center gap-3">
-                    <UserCircleIcon className="size-6 text-white" />
-                    <span className="text-gray-300 font-bold">
-                      Samuel Ferreira
-                    </span>
+            <div className="flex flex-col md:flex-row gap-12">
+              <div className="grid grid-cols-2 auto-rows-min gap-y-6 w-full max-w-xs">
+                <div className="">
+                  <span className="text-5xl text-indigo-600 font-bold">
+                    4.7
+                  </span>
+                  <span className="text-2xl text-indigo-600">/5</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <span className="text-white text-sm">788 avaliações</span>
+                  <div className="flex gap-1">
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <StarIcon key={idx} className="size-5 text-white" />
+                    ))}
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-300">
-                    Produto de excelente qualidade! Super recomendo.
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-            <Button className="w-full flex items-center justify-between bg-indigo-900 hover:bg-indigo-700 transtion-all duration-300">
-              <span>Ver mais avaliações</span>
-              <ArrowRightCircleIcon className="size-6" />
-            </Button>
+                </div>
+                <div className="col-span-2">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index} className="flex items-center">
+                      <Progress
+                        value={56}
+                        className="mr-4 bg-white h-2"
+                        indicatorColor="bg-indigo-700"
+                      />
+                      <span className="text-white text-sm mr-2">5</span>
+                      <StarIcon className="size-4 text-white" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                {Array.from({ length: 3 }).map((_, idx) => (
+                  <div key={idx} className="w-full max-w-xl mb-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <UserCircleIcon className="size-8 text-white" />
+                      <span className="text-gray-300 font-bold">
+                        Samuel Ferreira
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-300 mb-2">
+                      Produto de excelente qualidade! Super recomendo. Lorem
+                      ipsum dolor sit amet consectetur adipisicing elit. Iste
+                      aut quidem natus necessitatibus totam debitis quae fuga
+                      doloribus omnis animi perspiciatis optio, consectetur esse
+                      blanditiis ratione deserunt. Est ducimus, libero assumenda
+                      numquam quis consequatur facilis voluptatem beatae
+                      reprehenderit similique illum porro ipsum quas laborum
+                      incidunt necessitatibus architecto velit ipsa provident
+                      repellendus sapiente laboriosam nam. Maiores vitae
+                      voluptates, mollitia, minima laborum consectetur corporis
+                      deleniti modi obcaecati ullam, voluptatum similique.
+                      Asperiores quos odit optio voluptatem iste amet, cum
+                      voluptates deserunt ratione sed natus in necessitatibus
+                      commodi dolorum ipsum sapiente aliquam facere magni
+                      delectus fugit sit vero illo ad suscipit! Eius, saepe
+                      iusto?
+                    </p>
+                    <div className="flex gap-1">
+                      <Button className="text-gray-300 flex items-center gap-4">
+                        <HandThumbUpIcon className="size-4" />
+                      </Button>
+                      <Button className="text-gray-300 flex items-center gap-4">
+                        <HandThumbDownIcon className="size-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                <Button className="w-full max-w-[240px] flex items-center justify-between bg-indigo-900 hover:bg-indigo-700 transtion-all duration-300">
+                  <span>Ver mais avaliações</span>
+                  <ArrowRightCircleIcon className="size-6" />
+                </Button>
+              </div>
+            </div>
           </section>
         </Container>
       </div>
