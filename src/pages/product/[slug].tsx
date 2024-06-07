@@ -25,10 +25,15 @@ import { Separator } from '@/components/ui/separator'
 import { Footer } from '@/components/footer'
 import { Container } from '@/components/container'
 import { Progress } from '@/components/ui/progress'
+import { useProduct } from '@/hooks/useProduct'
 
 export default function ProductPage() {
   const router = useRouter()
-  const { slug } = router.query
+  const { slug } = router.query as { slug: string }
+
+  const { data } = useProduct(slug)
+
+  console.log({ data })
 
   return (
     <div className="bg-slate-800">
@@ -56,14 +61,12 @@ export default function ProductPage() {
                   </div>
                 </div>
                 <CarouselContent>
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <CarouselItem key={index}>
+                  {data?.images.map((image) => (
+                    <CarouselItem key={image.url}>
                       <div className="p-1">
                         <Card>
                           <CardContent className="flex aspect-square items-center justify-center p-6 lg:p-0">
-                            <span className="text-xl font-semibold">
-                              Foto {index + 1}
-                            </span>
+                            <img src={image.url} />
                           </CardContent>
                         </Card>
                       </div>
