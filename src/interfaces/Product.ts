@@ -5,7 +5,9 @@ export interface IProduct {
   name: string
   slug: string
   description: string
-  price: number
+  fullPrice: number
+  finalPrice: number
   category: string
   images: IProductImage[]
+  available: boolean
 }

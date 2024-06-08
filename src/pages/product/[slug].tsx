@@ -26,14 +26,13 @@ import { Footer } from '@/components/footer'
 import { Container } from '@/components/container'
 import { Progress } from '@/components/ui/progress'
 import { useProduct } from '@/hooks/useProduct'
+import { formatCurrency } from '@/utils/formatCurrency'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function ProductPage() {
   const router = useRouter()
   const { slug } = router.query as { slug: string }
-
-  const { data } = useProduct(slug)
-
-  console.log({ data })
+  const { data, isLoading } = useProduct(slug, !!slug)
 
   return (
     <div className="bg-slate-800">
@@ -41,56 +40,88 @@ export default function ProductPage() {
       <div className="h-full py-6 px-3">
         <Container>
           <section>
-            <p className="text-white text-lg font-bold mb-6">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia,
-              debitis.
-            </p>
+            {isLoading ? (
+              <Skeleton className="w-full lg:max-w-[800px] h-5 mb-6" />
+            ) : (
+              <p className="text-white text-lg font-bold mb-6">{data?.name}</p>
+            )}
           </section>
 
           <section className="flex justify-center gap-8">
             <div className="w-full">
-              <Carousel className="max-w-xs lg:max-w-sm" opts={{ loop: true }}>
-                <div className="flex justify-between mb-4 text-white">
-                  <div className="flex gap-2 items-center cursor-pointer">
-                    <ChatBubbleLeftIcon className="size-6" />
-                    <span className="text-sm">(233)</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <ShareIcon className="size-6 cursor-pointer" />
-                    <HeartIcon className="size-6 cursor-pointer" />
-                  </div>
+              {isLoading ? (
+                <div className="flex flex-col gap-3">
+                  <Skeleton className="w-full max-w-sm h-5" />
+                  <Skeleton className="w-full max-w-sm h-80" />
                 </div>
-                <CarouselContent>
-                  {data?.images.map((image) => (
-                    <CarouselItem key={image.url}>
-                      <div className="p-1">
-                        <Card>
-                          <CardContent className="flex aspect-square items-center justify-center p-6 lg:p-0">
-                            <img src={image.url} />
-                          </CardContent>
-                        </Card>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselNext className="right-3 top-[53%] opacity-70" />
-                <CarouselPrevious className="left-3 top-[53%] opacity-70" />
-              </Carousel>
+              ) : (
+                <Carousel
+                  className="max-w-xs lg:max-w-sm"
+                  opts={{ loop: true }}
+                >
+                  <div className="flex justify-between mb-4 text-white">
+                    <div className="flex gap-2 items-center cursor-pointer">
+                      <ChatBubbleLeftIcon className="size-6" />
+                      <span className="text-sm">(233)</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <ShareIcon className="size-6 cursor-pointer" />
+                      <HeartIcon className="size-6 cursor-pointer" />
+                    </div>
+                  </div>
+                  <CarouselContent>
+                    {data?.images.map((image) => (
+                      <CarouselItem key={image.url}>
+                        <div className="p-1">
+                          <Card className="border-none">
+                            <CardContent className="flex items-center justify-center p-0">
+                              <img
+                                src={image.url}
+                                className="w-full h-80 object-cover overflow-hidden rounded-lg"
+                              />
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselNext className="right-3 top-[53%] opacity-70" />
+                  <CarouselPrevious className="left-3 top-[53%] opacity-70" />
+                </Carousel>
+              )}
             </div>
 
             <div className="hidden md:flex flex-col w-full mt-10">
-              <p className="text-gray-300 text-sm mb-4">
-                Vendido por:{' '}
-                <span className="font-bold underline text-white">
-                  Simple E-commerce
-                </span>
-              </p>
-              <p className="text-gray-400 line-through text-2xl">R$ 799,99</p>
-              <p className="text-white text-4xl">R$ 599,99</p>
-              <p className="text-sm underline text-white mt-3 cursor-pointer">
-                Ver outros meios de pagamento
-              </p>
-              <p className="text-green-500 font-bold mt-3">Em Estoque!</p>
+              {isLoading ? (
+                <div>
+                  <Skeleton className="mb-4 max-w-[184px] h-4" />
+                  <Skeleton className="mb-4 max-w-[144px] h-4" />
+                  <Skeleton className="mb-4 max-w-[168px] h-8" />
+                  <Skeleton className="mb-4 max-w-[184px] h-4" />
+                  <Skeleton className="mb-4 max-w-[120px] h-5" />
+                </div>
+              ) : (
+                <>
+                  <p className="text-gray-300 text-sm mb-4">
+                    Vendido por:{' '}
+                    <span className="font-bold underline text-white">
+                      Simple E-commerce
+                    </span>
+                  </p>
+                  <p className="text-gray-400 line-through text-2xl">
+                    {data?.fullPrice && formatCurrency(data.fullPrice)}
+                  </p>
+
+                  <p className="text-white text-4xl">
+                    {data?.finalPrice && formatCurrency(data.finalPrice)}
+                  </p>
+
+                  <p className="text-sm underline text-white mt-3 cursor-pointer">
+                    Ver outros meios de pagamento
+                  </p>
+                  <p className="text-green-500 font-bold mt-3">Em Estoque!</p>
+                </>
+              )}
             </div>
 
             <div className="hidden lg:flex flex-col gap-3 w-full mt-10">
@@ -106,11 +137,28 @@ export default function ProductPage() {
 
           <section className="my-4">
             <div className="md:hidden">
-              <p className="text-gray-400 line-through">R$ 799,99</p>
-              <p className="text-white text-4xl">R$ 599,99</p>
-              <p className="text-sm underline text-white mt-3 cursor-pointer">
-                Ver outros meios de pagamento
-              </p>
+              {isLoading ? (
+                <div className="flex flex-col gap-3 w-full">
+                  <Skeleton className="max-w-[184px] h-4" />
+                  <Skeleton className="max-w-[144px] h-4" />
+                  <Skeleton className="max-w-[168px] h-8" />
+                  <Skeleton className="max-w-[184px] h-4" />
+                  <Skeleton className="max-w-[120px] h-5" />
+                </div>
+              ) : (
+                <>
+                  <p className="text-gray-400 line-through">
+                    {data?.fullPrice && formatCurrency(data.fullPrice)}
+                  </p>
+                  <p className="text-white text-4xl">
+                    {data?.finalPrice && formatCurrency(data.finalPrice)}
+                  </p>
+                  <p className="text-sm underline text-white mt-3 cursor-pointer">
+                    Ver outros meios de pagamento
+                  </p>
+                  <p className="text-green-500 font-bold mt-3">Em Estoque!</p>
+                </>
+              )}
             </div>
             <div className="my-6">
               <span className="block mb-3 text-white text-sm font-bold">
@@ -146,33 +194,7 @@ export default function ProductPage() {
             <h2 className="text-white font-bold mb-4 text-lg">
               Descrição do Produto
             </h2>
-            <p className="text-white md:text-lg">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia
-              eligendi harum debitis dolorem obcaecati soluta, cumque, enim
-              fugiat ipsam delectus iusto dicta tempore autem itaque aliquid? At
-              explicabo ipsam quia dolor, est cum expedita dignissimos quos
-              officiis eaque optio possimus esse temporibus pariatur, vitae ut
-              beatae eos molestias non illum perferendis maxime iste. Sint aut
-              ipsa quas voluptas molestiae repellendus. Lorem, ipsum dolor sit
-              amet consectetur adipisicing elit. Ipsam, modi eius blanditiis
-              eaque culpa iure quis, quaerat, fugit tenetur saepe odit ut illo
-              cupiditate porro. Reprehenderit maiores nisi facere numquam soluta
-              animi voluptate possimus, ratione dolore autem veniam quibusdam
-              sequi? Laborum reprehenderit a dolores cumque repellat quam odio,
-              voluptatum aperiam. Lorem, ipsum dolor sit amet consectetur
-              adipisicing elit. Facilis, omnis illo perspiciatis possimus
-              tenetur fugit, quis nulla, suscipit modi sequi culpa rem earum
-              itaque ullam doloribus! Blanditiis vitae velit reprehenderit ipsum
-              ducimus provident nihil quas, dolorem eum dicta molestiae, ad,
-              aspernatur perferendis inventore dolores ea nostrum iure
-              recusandae eos quae ullam! Facilis dolorum dicta repudiandae ipsa
-              iste possimus nihil necessitatibus perspiciatis voluptatum error
-              quam voluptatem repellendus, consectetur pariatur distinctio
-              quibusdam laboriosam aspernatur illo ipsam. Quae distinctio aut
-              blanditiis reiciendis maxime itaque architecto fugit eaque ullam
-              accusamus voluptate vero quia harum quas nisi explicabo, dolores
-              neque excepturi, ipsa similique iure doloribus.
-            </p>
+            <p className="text-white md:text-lg">{data?.description}</p>
 
             <Separator className="my-6 bg-slate-700" />
 
@@ -203,7 +225,9 @@ export default function ProductPage() {
                         className="mr-4 bg-white h-2"
                         indicatorColor="bg-indigo-700"
                       />
-                      <span className="text-white text-sm mr-2">5</span>
+                      <span className="text-white text-sm mr-2">
+                        {5 - index}
+                      </span>
                       <StarIcon className="size-4 text-white" />
                     </div>
                   ))}
