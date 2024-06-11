@@ -28,11 +28,13 @@ import { Progress } from '@/components/ui/progress'
 import { useProduct } from '@/hooks/useProduct'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useComments } from '@/hooks/useComments'
 
 export default function ProductPage() {
   const router = useRouter()
-  const { slug } = router.query as { slug: string }
-  const { data, isLoading } = useProduct(slug, !!slug)
+  const { productId } = router.query as { productId: string }
+  const { data, isLoading } = useProduct(productId, !!productId)
+  const { data: comments } = useComments(productId, !!productId)
 
   return (
     <div className="bg-slate-800">
@@ -234,31 +236,16 @@ export default function ProductPage() {
                 </div>
               </div>
               <div>
-                {Array.from({ length: 3 }).map((_, idx) => (
-                  <div key={idx} className="w-full max-w-xl mb-6">
+                {comments?.map((comment) => (
+                  <div key={comment.id} className="w-full max-w-xl mb-6">
                     <div className="flex items-center gap-3 mb-4">
                       <UserCircleIcon className="size-8 text-white" />
                       <span className="text-gray-300 font-bold">
-                        Samuel Ferreira
+                        {comment.user.name}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-300 mb-2">
-                      Produto de excelente qualidade! Super recomendo. Lorem
-                      ipsum dolor sit amet consectetur adipisicing elit. Iste
-                      aut quidem natus necessitatibus totam debitis quae fuga
-                      doloribus omnis animi perspiciatis optio, consectetur esse
-                      blanditiis ratione deserunt. Est ducimus, libero assumenda
-                      numquam quis consequatur facilis voluptatem beatae
-                      reprehenderit similique illum porro ipsum quas laborum
-                      incidunt necessitatibus architecto velit ipsa provident
-                      repellendus sapiente laboriosam nam. Maiores vitae
-                      voluptates, mollitia, minima laborum consectetur corporis
-                      deleniti modi obcaecati ullam, voluptatum similique.
-                      Asperiores quos odit optio voluptatem iste amet, cum
-                      voluptates deserunt ratione sed natus in necessitatibus
-                      commodi dolorum ipsum sapiente aliquam facere magni
-                      delectus fugit sit vero illo ad suscipit! Eius, saepe
-                      iusto?
+                    <p className="text-sm text-gray-300 mb-4">
+                      {comment.content}
                     </p>
                     <div className="flex gap-1">
                       <Button className="text-gray-300 flex items-center gap-4">
