@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Footer } from '@/components/footer'
 import { HomeSection } from '@/components/home-section'
+import { ProductGroups } from '@/utils/productGroups'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +22,7 @@ export default function Home() {
           title="Ofertas"
           icon={RocketLaunchIcon}
           buttonText="Ver todas as ofertas"
+          groupId={ProductGroups.BEST_OFFERS}
         />
 
         {/* destaques */}
@@ -29,6 +31,7 @@ export default function Home() {
             title="Destaques"
             icon={StarIcon}
             buttonText="Ver todos os destaques"
+            groupId={ProductGroups.HIGHLIGHTS}
           />
         </div>
 
@@ -37,6 +40,7 @@ export default function Home() {
           title="Produtos Recomendados"
           icon={ListBulletIcon}
           buttonText="Ver Recomendações"
+          groupId={ProductGroups.RECOMMENDED}
         />
 
         {/* mais vendidos */}
@@ -45,6 +49,7 @@ export default function Home() {
             title="Mais Vendidos"
             icon={CurrencyDollarIcon}
             buttonText="Ver mais produtos"
+            groupId={ProductGroups.BEST_SELLERS}
           />
         </div>
       </div>
