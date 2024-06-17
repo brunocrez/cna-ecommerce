@@ -1,6 +1,7 @@
+import { useRouter } from 'next/router'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { Button } from './ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from './ui/card'
+import { Card, CardContent, CardFooter } from './ui/card'
 import {
   Carousel,
   CarouselContent,
@@ -8,8 +9,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from './ui/carousel'
+import { Skeleton } from './ui/skeleton'
 import { useProductsByGroupId } from '@/hooks/useProductsByGroupId'
-import { useRouter } from 'next/router'
+import { HomeSectionLoader } from './home-section-loader'
 
 interface IHomeSectionProps {
   icon: React.ElementType
@@ -25,7 +27,7 @@ export function HomeSection({
   groupId,
 }: IHomeSectionProps) {
   const { push } = useRouter()
-  const { data } = useProductsByGroupId(groupId)
+  const { data, isLoading } = useProductsByGroupId(groupId)
 
   return (
     <section className="lg:max-w-[1536px] mx-auto py-6 px-3">
@@ -34,14 +36,19 @@ export function HomeSection({
           <Icon className="size-6" />
           <h2 className="font-bold sm:text-xl">{title}</h2>
         </div>
-        <Button className="hidden sm:flex bg-transparent uppercase tracking-widest items-center gap-3 font-bold px-0 hover:bg-transparent">
+        <Button
+          disabled={isLoading}
+          className="hidden sm:flex bg-transparent uppercase tracking-widest items-center gap-3 font-bold px-0 hover:bg-transparent"
+        >
           <span>ver todos</span>
           <ChevronRightIcon className="size-5" />
         </Button>
       </div>
 
+      {isLoading && <HomeSectionLoader />}
+
       <Carousel
-        className="w-full mx-auto max-w-xs sm:max-w-[1536px] mb-4"
+        className="w-full mx-auto max-w-sm sm:max-w-[1536px] mb-4"
         opts={{ loop: true }}
       >
         <CarouselContent>
@@ -56,7 +63,7 @@ export function HomeSection({
                   <Card className="border-none rounded-lg">
                     <CardContent className="flex items-center justify-center p-0 rounded-lg overflow-hidden">
                       <img
-                        src={product.images[1].url}
+                        src={product.images[0].url}
                         className="w-full h-80 object-cover"
                       />
                     </CardContent>
@@ -71,13 +78,21 @@ export function HomeSection({
             )
           })}
         </CarouselContent>
-        <CarouselNext className="right-2 opacity-70" />
-        <CarouselPrevious className="left-2 opacity-70" />
+        {data && (
+          <>
+            <CarouselNext className="right-2 opacity-70" />
+            <CarouselPrevious className="left-2 opacity-70" />
+          </>
+        )}
       </Carousel>
 
-      <Button className="w-full flex mx-auto max-w-xs sm:hidden">
-        {buttonText}
-      </Button>
+      {isLoading ? (
+        <Skeleton className="w-full max-w-sm h-10 sm:hidden mx-auto" />
+      ) : (
+        <Button className="w-full flex mx-auto max-w-sm sm:hidden">
+          {buttonText}
+        </Button>
+      )}
     </section>
   )
 }
