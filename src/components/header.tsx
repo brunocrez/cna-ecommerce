@@ -1,35 +1,43 @@
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Input } from './ui/input'
-import { Separator } from './ui/separator'
 import {
   Bars3Icon,
   ShoppingBagIcon,
-  XMarkIcon,
-  UserCircleIcon,
   HeartIcon,
   UserIcon,
   ShoppingCartIcon,
 } from '@heroicons/react/24/outline'
 import { Menu } from './menu'
 import { Container } from './container'
+import { Overlay } from './overlay'
 
 export function Header() {
   const [isVisible, setIsVisible] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   const handleClickMenu = () => {
     setIsVisible((prevState) => !prevState)
   }
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setIsVisible(false)
+    }
+  }
+
   useEffect(() => {
     if (isVisible) {
       document.body.style.overflow = 'hidden'
+      document.addEventListener('mousedown', handleClickOutside)
     } else {
       document.body.style.overflow = 'auto'
+      document.removeEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
       document.body.style.overflow = 'auto'
+      document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [isVisible])
 
@@ -118,33 +126,10 @@ export function Header() {
         <ShoppingBagIcon className="size-8 text-gray-300 cursor-pointer" />
       </div>
 
-      <div
-        className={`py-6 px-3 absolute z-30 top-0 w-full max-w-80 h-full flex flex-col transition-all duration-500 bg-slate-900 ${
-          isVisible ? 'left-0' : '-left-full'
-        }`}
-      >
-        <div className="flex items-center justify-between">
-          <XMarkIcon
-            className="size-8 text-white cursor-pointer"
-            onClick={handleClickMenu}
-          />
-          <div className="flex gap-4">
-            <UserCircleIcon className="size-8 text-white cursor-pointer" />
-            <ShoppingBagIcon className="size-8 text-white cursor-pointer" />
-          </div>
-        </div>
-        <Separator className="my-6 bg-slate-700" />
-        <Menu />
-      </div>
+      <Menu isVisible={isVisible} ref={menuRef} handleClick={handleClickMenu} />
 
       {/* overlay */}
-      <div
-        className={`${
-          isVisible
-            ? 'fixed top-0 left-0 w-full h-full bg-black bg-opacity-20 z-20'
-            : ''
-        }`}
-      ></div>
+      <Overlay isVisible={isVisible} />
     </>
   )
 }
