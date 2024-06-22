@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import Image from 'next/image'
 import {
   TruckIcon,
@@ -18,8 +19,28 @@ import { Footer } from '@/components/footer'
 import { Separator } from '@/components/ui/separator'
 import { Container } from '@/components/container'
 import { Input } from '@/components/ui/input'
+import { useAuth } from '@/contexts/AuthContext'
+import { useCreateOrder } from '@/hooks/useCreateOrder'
+import { ProductItemQuery } from '@/interfaces/Product'
+import { useEffect } from 'react'
+import { Skeleton } from '@/components/ui/skeleton'
+import { formatCurrency } from '@/utils/formatCurrency'
 
 export default function CheckoutPage() {
+  const { query } = useRouter()
+  const { user } = useAuth()
+
+  const { productId, price, quantity } = query as ProductItemQuery
+  const { data, isPending, mutate } = useCreateOrder(user, [
+    { productId, price: Number(price), quantity: Number(quantity) },
+  ])
+
+  useEffect(() => {
+    if (user && query) {
+      mutate()
+    }
+  }, [user, query])
+
   return (
     <div className="bg-slate-800">
       <Header />
@@ -196,19 +217,35 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>R$ 2.200,99</span>
+                  {isPending ? (
+                    <Skeleton className="w-24 h-6" />
+                  ) : (
+                    <span>
+                      {data && formatCurrency(data?.products[0].price)}
+                    </span>
+                  )}
                 </div>
                 <Separator className="bg-slate-600 my-4" />
                 <div className="flex justify-between">
                   <span>Frete</span>
-                  <span>R$ 49,99</span>
+                  {isPending ? (
+                    <Skeleton className="w-20 h-6" />
+                  ) : (
+                    <span>
+                      {data && formatCurrency(data.products[0].freight)}
+                    </span>
+                  )}
                 </div>
                 <Separator className="bg-slate-600 my-4" />
                 <div className="flex justify-between">
                   <span>Total</span>
-                  <span className="text-green-500 font-bold text-xl">
-                    R$ 2.199,99
-                  </span>
+                  {isPending ? (
+                    <Skeleton className="w-32 h-7" />
+                  ) : (
+                    <span className="text-green-500 font-bold text-xl">
+                      {data && formatCurrency(data.order.total)}
+                    </span>
+                  )}
                 </div>
               </div>
 

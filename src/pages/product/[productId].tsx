@@ -29,12 +29,19 @@ import { useProduct } from '@/hooks/useProduct'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useComments } from '@/hooks/useComments'
+import { checkoutQuery } from '@/utils/checkoutQuery'
 
 export default function ProductPage() {
   const router = useRouter()
   const { productId } = router.query as { productId: string }
   const { data, isLoading } = useProduct(productId, !!productId)
   const { data: comments } = useComments(productId, !!productId)
+
+  const query = data && checkoutQuery(data)
+
+  const handleClickPurchase = () => {
+    router.push({ pathname: '/checkout', query })
+  }
 
   return (
     <div className="bg-slate-800">
@@ -127,7 +134,10 @@ export default function ProductPage() {
             </div>
 
             <div className="hidden lg:flex flex-col gap-3 w-full mt-10">
-              <Button className="flex gap-3 bg-indigo-800 w-full h-12">
+              <Button
+                className="flex gap-3 bg-indigo-800 w-full h-12"
+                onClick={handleClickPurchase}
+              >
                 <ShoppingCartIcon className="size-7" />
                 <span className="text-lg font-bold">Comprar</span>
               </Button>
@@ -177,7 +187,10 @@ export default function ProductPage() {
                 </Button>
               </div>
               <div className="w-full flex flex-col gap-3 mt-6 md:flex-row md:justify-center lg:hidden">
-                <Button className="flex gap-3 bg-indigo-800 w-full h-12">
+                <Button
+                  className="flex gap-3 bg-indigo-800 w-full h-12"
+                  onClick={handleClickPurchase}
+                >
                   <ShoppingCartIcon className="size-7" />
                   <span className="text-lg font-bold">Comprar</span>
                 </Button>
