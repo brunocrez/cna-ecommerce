@@ -14,7 +14,6 @@ export interface IProduct {
 
 export type ProductItemType = {
   productId: string
-  price: number
   quantity: number
 }
 

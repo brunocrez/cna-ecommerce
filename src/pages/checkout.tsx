@@ -30,9 +30,9 @@ export default function CheckoutPage() {
   const { query } = useRouter()
   const { user } = useAuth()
 
-  const { productId, price, quantity } = query as ProductItemQuery
+  const { productId, quantity } = query as ProductItemQuery
   const { data, isPending, mutate } = useCreateOrder(user, [
-    { productId, price: Number(price), quantity: Number(quantity) },
+    { productId, quantity: Number(quantity) },
   ])
 
   useEffect(() => {
@@ -221,7 +221,7 @@ export default function CheckoutPage() {
                     <Skeleton className="w-24 h-6" />
                   ) : (
                     <span>
-                      {data && formatCurrency(data?.products[0].price)}
+                      {data && formatCurrency(data?.orderItems[0].price)}
                     </span>
                   )}
                 </div>
@@ -232,7 +232,7 @@ export default function CheckoutPage() {
                     <Skeleton className="w-20 h-6" />
                   ) : (
                     <span>
-                      {data && formatCurrency(data.products[0].freight)}
+                      {data && formatCurrency(data.orderItems[0].freight)}
                     </span>
                   )}
                 </div>

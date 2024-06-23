@@ -17,5 +17,5 @@ type OrderProductsType = {
 
 export type CreateOrderResponseType = {
   order: OrderResponseType
-  products: OrderProductsType[]
+  orderItems: OrderProductsType[]
 }
