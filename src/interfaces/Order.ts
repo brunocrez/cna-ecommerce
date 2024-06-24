@@ -3,6 +3,8 @@ type OrderResponseType = {
   userId: string
   status: string
   total: number
+  subTotal: number
+  totalFreight: number
   createdAt: Date
 }
 
