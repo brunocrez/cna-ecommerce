@@ -19,7 +19,6 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Footer } from '@/components/footer'
@@ -30,6 +29,7 @@ import { formatCurrency } from '@/utils/formatCurrency'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useComments } from '@/hooks/useComments'
 import { checkoutQuery } from '@/utils/checkoutQuery'
+import { ZipCode } from '@/components/zip-code'
 
 export default function ProductPage() {
   const router = useRouter()
@@ -173,19 +173,7 @@ export default function ProductPage() {
               )}
             </div>
             <div className="my-6">
-              <span className="block mb-3 text-white text-sm font-bold">
-                Calcular frete e prazo de entrega
-              </span>
-              <div className="flex items-center gap-2">
-                <Input
-                  type="text"
-                  placeholder="00000-000"
-                  className="w-full sm:max-w-48"
-                />
-                <Button className="bg-white text-slate-800 font-bold">
-                  OK
-                </Button>
-              </div>
+              <ZipCode productId={data?.id || ''} />
               <div className="w-full flex flex-col gap-3 mt-6 md:flex-row md:justify-center lg:hidden">
                 <Button
                   className="flex gap-3 bg-indigo-800 w-full h-12"
