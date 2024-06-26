@@ -1,4 +1,4 @@
-type DeliveryOptionType = {
+export type DeliveryOptionType = {
   name: string
   price: number
   deadline: number

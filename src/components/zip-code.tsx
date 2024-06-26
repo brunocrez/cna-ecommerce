@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
@@ -6,6 +6,7 @@ import { Label } from './ui/label'
 import { useDeliveryOptions } from '@/hooks/useDeliveryOptions'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { useCheckout } from '@/contexts/CheckoutContext'
+import { DeliveryOptionType } from '@/interfaces/DeliveryOptions'
 
 type ZipCodeProps = {
   productId: string
@@ -33,8 +34,8 @@ export function ZipCode({ productId }: ZipCodeProps) {
     setZipError('')
   }
 
-  function handleClickRadioItem(index: number) {
-    setDeliveryOption(index)
+  function handleClickRadioItem(option: DeliveryOptionType) {
+    setDeliveryOption(option)
     setZipError('')
   }
 
@@ -70,13 +71,16 @@ export function ZipCode({ productId }: ZipCodeProps) {
           <RadioGroup className="gap-4">
             {data.deliveryOptions.map((deliveryOption, idx) => {
               return (
-                <div className="bg-slate-600 rounded-md p-4">
+                <div
+                  key={deliveryOption.name}
+                  className="bg-slate-600 rounded-md p-4"
+                >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem
                       value={`option-${idx}`}
                       id={`option-${idx}`}
                       className="bg-white text-indigo-700 border-none"
-                      onClick={() => handleClickRadioItem(idx + 1)}
+                      onClick={() => handleClickRadioItem(deliveryOption)}
                     />
                     <Label
                       htmlFor={`option-${idx}`}

@@ -1,3 +1,6 @@
+import { IProduct, ProductItemType } from './Product'
+import { LoggedUserType } from './User'
+
 type OrderResponseType = {
   id: string
   userId: string
@@ -15,9 +18,15 @@ type OrderProductsType = {
   quantity: number
   price: number
   freight: number
+  Product: IProduct
 }
 
 export type CreateOrderResponseType = {
   order: OrderResponseType
   orderItems: OrderProductsType[]
+}
+
+export type CreateOrderRequestType = {
+  items: ProductItemType[]
+  user: LoggedUserType
 }

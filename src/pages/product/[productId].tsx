@@ -28,9 +28,9 @@ import { useProduct } from '@/hooks/useProduct'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useComments } from '@/hooks/useComments'
-import { checkoutQuery } from '@/utils/checkoutQuery'
 import { ZipCode } from '@/components/zip-code'
 import { useCheckout } from '@/contexts/CheckoutContext'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function ProductPage() {
   const router = useRouter()
@@ -38,16 +38,21 @@ export default function ProductPage() {
   const { data, isLoading } = useProduct(productId, !!productId)
   const { data: comments } = useComments(productId, !!productId)
 
-  const { zipCode, zipError, setZipError, deliveryOption } = useCheckout()
-
-  const query = data && checkoutQuery(data)
+  const { user } = useAuth()
+  const { zipCode, zipError, setZipError, deliveryOption, setQuickPurchase } =
+    useCheckout()
 
   const handleClickPurchase = () => {
     if (!zipCode || zipError || !deliveryOption) {
       return setZipError('Selecione uma opção de frete para continuar!')
     }
 
-    router.push({ pathname: '/checkout', query })
+    setQuickPurchase({
+      user,
+      items: [{ productId, quantity: 1, freight: deliveryOption }],
+    })
+
+    router.push('/checkout')
   }
 
   return (

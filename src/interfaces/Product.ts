@@ -1,3 +1,4 @@
+import { DeliveryOptionType } from './DeliveryOptions'
 import { IProductImage } from './ProductImage'
 
 export interface IProduct {
@@ -15,10 +16,5 @@ export interface IProduct {
 export type ProductItemType = {
   productId: string
   quantity: number
-}
-
-export type ProductItemQuery = {
-  productId: string
-  price: string
-  quantity: string
+  freight: DeliveryOptionType
 }

@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import {
   MinusCircleIcon,
   PlusCircleIcon,
@@ -12,29 +11,26 @@ import { Footer } from '@/components/footer'
 import { Separator } from '@/components/ui/separator'
 import { Container } from '@/components/container'
 import { Input } from '@/components/ui/input'
-import { useAuth } from '@/contexts/AuthContext'
 import { useCreateOrder } from '@/hooks/useCreateOrder'
-import { ProductItemQuery } from '@/interfaces/Product'
 import { useEffect } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { DeliveryAddress } from '@/components/delivery-address'
 import { PaymentCard } from '@/components/payment-card'
+import { useCheckout } from '@/contexts/CheckoutContext'
 
 export default function CheckoutPage() {
-  const { query } = useRouter()
-  const { user } = useAuth()
-
-  const { productId, quantity } = query as ProductItemQuery
-  const { data, isPending, mutate } = useCreateOrder(user, [
-    { productId, quantity: Number(quantity) },
-  ])
+  const { quickPurchase } = useCheckout()
+  const { data, isPending, mutate } = useCreateOrder(
+    quickPurchase?.user!,
+    quickPurchase?.items!,
+  )
 
   useEffect(() => {
-    if (user && query) {
+    if (quickPurchase) {
       mutate()
     }
-  }, [user, query])
+  }, [quickPurchase])
 
   return (
     <div className="bg-slate-800">
@@ -60,8 +56,8 @@ export default function CheckoutPage() {
                     <span className="md:hidden">remover todos</span>
                   </Button>
                 </div>
-                {Array.from({ length: 2 }).map((_, index) => (
-                  <div className="mb-4 " key={index}>
+                {data?.orderItems.map((orderItem) => (
+                  <div className="mb-4 " key={orderItem.id}>
                     <div className="flex gap-4 mb-3">
                       <img
                         className="size-24 rounded-md"
@@ -72,20 +68,11 @@ export default function CheckoutPage() {
                       />
                       <div className="flex flex-col gap-1 overflow-hidden">
                         <span className="text-white text-sm text-ellipsis line-clamp-2">
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Reiciendis, modi! Lorem ipsum dolor sit, amet
-                          consectetur adipisicing elit. Est voluptatibus
-                          voluptatum eius facere labore, placeat accusantium
-                          officiis nobis soluta qui vitae dolor facilis
-                          provident incidunt dolorum tempora consequatur
-                          explicabo molestias.
+                          {orderItem.Product.name}
                         </span>
                         <div className="flex items-center">
-                          <span className="text-gray-200 text-xs font-bold">
-                            R$
-                          </span>
                           <span className="text-gray-200 text-xl font-bold">
-                            599,99
+                            {formatCurrency(orderItem.Product.finalPrice)}
                           </span>
                           <Button className="ml-auto bg-transparent hover:bg-transparent">
                             <TrashIcon className="size-6 text-red-500" />
