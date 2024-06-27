@@ -12,25 +12,20 @@ import { Separator } from '@/components/ui/separator'
 import { Container } from '@/components/container'
 import { Input } from '@/components/ui/input'
 import { useCreateOrder } from '@/hooks/useCreateOrder'
-import { useEffect } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { DeliveryAddress } from '@/components/delivery-address'
 import { PaymentCard } from '@/components/payment-card'
 import { useCheckout } from '@/contexts/CheckoutContext'
+import { LoggedUserType } from '@/interfaces/User'
 
 export default function CheckoutPage() {
   const { quickPurchase } = useCheckout()
-  const { data, isPending, mutate } = useCreateOrder(
-    quickPurchase?.user!,
-    quickPurchase?.items!,
+  const { data, isPending } = useCreateOrder(
+    quickPurchase?.user ?? ({} as LoggedUserType),
+    quickPurchase?.items ?? [],
+    !!quickPurchase?.user.userId && quickPurchase?.items.length > 0,
   )
-
-  useEffect(() => {
-    if (quickPurchase) {
-      mutate()
-    }
-  }, [quickPurchase])
 
   return (
     <div className="bg-slate-800">
