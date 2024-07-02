@@ -1,3 +1,5 @@
+import { IAddress } from './Address'
+
 export interface IUser {
   id: string
   name: string
@@ -9,4 +11,5 @@ export type LoggedUserType = {
   name: string
   email: string
   userId: string
+  addresses: IAddress[]
 }

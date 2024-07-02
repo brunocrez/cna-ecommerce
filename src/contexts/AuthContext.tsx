@@ -15,6 +15,17 @@ const loggedUser = {
   name: 'Ivan Barreto',
   email: 'ivanbarreto@email.com',
   userId: '0f6dfca3-5385-4449-b476-41d84a17bd3a',
+  addresses: [
+    {
+      street: 'Rua das Amoras',
+      city: 'Uberlândia',
+      state: 'MG',
+      country: 'BR',
+      neighborhood: 'Bairro Residencial',
+      number: 46,
+      postalCode: '38401101',
+    },
+  ],
 }
 
 export function AuthProvider({ children }: IAuthProviderProps) {

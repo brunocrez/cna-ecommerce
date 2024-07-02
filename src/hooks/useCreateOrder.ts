@@ -9,7 +9,7 @@ export const useCreateOrder = (
   enabled: boolean,
 ) => {
   return useQuery({
-    queryKey: [`createOrder-${user.userId}`],
+    queryKey: [`createOrder-${user.userId}-${items[0]?.productId}`],
     queryFn: () => createOrder(user, items),
     enabled,
     refetchOnWindowFocus: false,

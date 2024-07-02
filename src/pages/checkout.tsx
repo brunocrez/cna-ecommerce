@@ -36,12 +36,12 @@ export default function CheckoutPage() {
             <div className="w-full">
               {/* card pedidos */}
               <div className="bg-slate-700 rounded-md p-6 mb-6">
-                <div className="hidden sm:flex items-center gap-2 text-gray-300 mb-6 ">
+                <div className="flex items-center gap-2 text-gray-300 mb-6 ">
                   <CheckCircleIcon className="size-7" />
                   <h2 className="text-xl font-bold">Revisão do Pedido</h2>
 
                   <Button
-                    className="ml-auto uppercase flex items-center p-4 text-xs tracking-widest"
+                    className="hidden sm:flex ml-auto uppercase items-center p-4 text-xs tracking-widest"
                     size={'sm'}
                   >
                     <TrashIcon className="size-5 mr-2" />
@@ -56,26 +56,23 @@ export default function CheckoutPage() {
                     <div className="flex gap-4 mb-3">
                       <img
                         className="size-24 rounded-md"
-                        src="https://img.freepik.com/free-photo/top-view-arrangement-with-keyboard_23-2148604846.jpg"
+                        src={orderItem.Product.images[0].url}
                         alt="imagem pedido"
                         height={100}
                         width={70}
                       />
                       <div className="flex flex-col gap-1 overflow-hidden">
-                        <span className="text-white text-sm text-ellipsis line-clamp-2">
+                        <span className="text-white text-xs sm:text-sm text-ellipsis line-clamp-2">
                           {orderItem.Product.name}
                         </span>
                         <div className="flex items-center">
-                          <span className="text-gray-200 text-xl font-bold">
+                          <span className="text-gray-200 text-xs sm:text-xl font-bold">
                             {formatCurrency(orderItem.Product.finalPrice)}
                           </span>
                           <Button className="ml-auto bg-transparent hover:bg-transparent">
-                            <TrashIcon className="size-6 text-red-500" />
+                            <TrashIcon className="size-5 sm:size-6 text-red-500" />
                           </Button>
                         </div>
-                        <span className="text-sm text-green-600 font-bold">
-                          Em Estoque!
-                        </span>
 
                         <div className="flex items-center gap-2">
                           <Button
@@ -84,7 +81,7 @@ export default function CheckoutPage() {
                           >
                             <MinusCircleIcon className="size-6" />
                           </Button>
-                          <span className="text-gray-300">3</span>
+                          <span className="text-gray-300">1</span>
                           <Button
                             className="bg-transparent hover:bg-transparent px-0"
                             size={'sm'}
