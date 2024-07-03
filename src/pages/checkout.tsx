@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import {
   MinusCircleIcon,
   PlusCircleIcon,
@@ -18,14 +19,32 @@ import { DeliveryAddress } from '@/components/delivery-address'
 import { PaymentCard } from '@/components/payment-card'
 import { useCheckout } from '@/contexts/CheckoutContext'
 import { LoggedUserType } from '@/interfaces/User'
+import { useUpdateOrder } from '@/hooks/useUpdateOrder'
+import { useAuth } from '@/contexts/AuthContext'
+import { OrderStatus } from '@/utils/orderStatus'
+import { useEffect } from 'react'
 
 export default function CheckoutPage() {
-  const { quickPurchase } = useCheckout()
+  const { push } = useRouter()
+  const { quickPurchase, setOrderResponse } = useCheckout()
+  const { user } = useAuth()
   const { data, isPending } = useCreateOrder(
     quickPurchase?.user ?? ({} as LoggedUserType),
     quickPurchase?.items ?? [],
     !!quickPurchase?.user.userId && quickPurchase?.items.length > 0,
   )
+  const { triggerMutation, data: orderResponse, isSuccess } = useUpdateOrder()
+
+  function handleFinishOrder() {
+    triggerMutation({ userId: user.userId, status: OrderStatus.ACCEPTED })
+  }
+
+  useEffect(() => {
+    if (isSuccess && orderResponse) {
+      setOrderResponse(orderResponse)
+      push('/finish-order')
+    }
+  }, [isSuccess, orderResponse])
 
   return (
     <div className="bg-slate-800">
@@ -159,7 +178,12 @@ export default function CheckoutPage() {
               {/* card entrega */}
               <DeliveryAddress />
 
-              <Button size="lg" className="bg-green-600 font-bold text-xl">
+              <Button
+                onClick={handleFinishOrder}
+                disabled={isPending}
+                size="lg"
+                className="bg-green-600 font-bold text-xl"
+              >
                 Finalizar Pedido
               </Button>
             </div>
@@ -216,7 +240,11 @@ export default function CheckoutPage() {
                 </span>
               )}
             </div>
-            <Button className="w-full bg-indigo-700 mt-5">
+            <Button
+              onClick={handleFinishOrder}
+              disabled={isPending}
+              className="w-full bg-indigo-700 mt-5"
+            >
               Finalizar Pedido
             </Button>
           </section>

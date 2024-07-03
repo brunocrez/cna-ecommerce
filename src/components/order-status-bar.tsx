@@ -1,3 +1,5 @@
+import { colorCurrentStep } from '@/utils/colorCurrentStep'
+import { formatDateHour } from '@/utils/formateDate'
 import {
   CheckCircleIcon,
   PaperAirplaneIcon,
@@ -5,13 +7,22 @@ import {
   TruckIcon,
 } from '@heroicons/react/24/outline'
 
-export function OrderStatusBar() {
+type OrderStatusBarProps = {
+  currStep: string
+  date: string
+}
+
+export function OrderStatusBar({ currStep, date }: OrderStatusBarProps) {
+  const step = colorCurrentStep(currStep)
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex text-white">
         <div className="flex items-center w-full">
-          <ShoppingCartIcon className="size-6" />
-          <div className="w-full h-[1px] mx-1 bg-gray-200 relative after:block after:absolute after:h-[2px] after:top-0 after:bg-green-800"></div>
+          <ShoppingCartIcon
+            className={`size-6 ${step < 1 ? 'text-orange-600' : ''}`}
+          />
+          <div className="w-full h-[1px] mx-1 bg-gray-200 relative after:block after:absolute after:h-[2px] after:top-0"></div>
         </div>
         <div className="flex items-center w-full">
           <PaperAirplaneIcon className="size-6" />
@@ -28,7 +39,7 @@ export function OrderStatusBar() {
       <div className="flex justify-center items-center gap-3 text-white text-sm">
         <p>
           <span className="font-bold mr-1">Status:</span>
-          Pedido criado - 17/02/2024 13:28
+          Pedido criado - {formatDateHour(date)}
         </p>
       </div>
     </div>

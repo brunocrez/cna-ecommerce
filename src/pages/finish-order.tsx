@@ -4,9 +4,14 @@ import { Header } from '@/components/header'
 import { OrderStatusBar } from '@/components/order-status-bar'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { useCheckout } from '@/contexts/CheckoutContext'
+import { formatCurrency } from '@/utils/formatCurrency'
+import { formatDateHour } from '@/utils/formateDate'
 import { HandThumbUpIcon } from '@heroicons/react/24/outline'
 
 export default function FinishOrderPage() {
+  const { orderResponse } = useCheckout()
+  console.log(orderResponse)
   return (
     <div className="bg-slate-800">
       <Header />
@@ -18,11 +23,12 @@ export default function FinishOrderPage() {
                 <div className="flex flex-col sm:flex-row items-start gap-2 text-white font-bold">
                   <span className="text-lg">Pedido:</span>
                   <span className="text-sm sm:text-lg">
-                    0c4679e3-6d6f-4688-b278-221fe42095fe
+                    {orderResponse?.order.id}
                   </span>
                 </div>
                 <p className="text-indigo-300 text-sm mt-2">
-                  2024-07-01 13:28:26.847
+                  {orderResponse &&
+                    formatDateHour(orderResponse.order.createdAt)}
                 </p>
                 <p className="text-indigo-300 text-sm mt-2">Pedido criado.</p>
               </section>
@@ -49,39 +55,56 @@ export default function FinishOrderPage() {
                 <h2 className="text-lg font-bold mb-2">Valor</h2>
                 <div className="flex justify-between items-center text-sm mb-3">
                   <span>Total Produto(s):</span>
-                  <span>R$ 2.199,99</span>
+                  <span>
+                    {orderResponse &&
+                      formatCurrency(orderResponse.order.subTotal)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-sm mb-3">
                   <span>Frete:</span>
-                  <span>R$ 49,99</span>
+                  <span>
+                    {orderResponse &&
+                      formatCurrency(orderResponse.order.totalFreight)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center bg-slate-500 py-1 text-sm font-bold">
                   <span>Total Pedido:</span>
-                  <span>R$ 2.149,99</span>
+                  <span>
+                    {orderResponse && formatCurrency(orderResponse.order.total)}
+                  </span>
                 </div>
               </section>
 
               <section className="bg-slate-700 rounded-md p-6 mt-3 text-white">
-                <div className="flex gap-2 mb-4">
-                  <img
-                    className="w-12 h-auto"
-                    src="https://images.unsplash.com/photo-1628832307345-7404b47f1751?q=80&w=2083&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="foto do pedido"
-                  />
-                  <div className="w-full">
-                    <p className="text-ellipsis line-clamp-2 leading-4 text-sm mb-3">
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                      Consequuntur, error! Lorem ipsum dolor sit amet,
-                      consectetur adipisicing elit. Laborum, dolore.
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs">Quantidade: 1</span>
-                      <span className="text-sm">R$ 2.499,99</span>
+                {orderResponse?.orderItems.map((orderItem) => {
+                  return (
+                    <div key={orderItem.id} className="flex gap-2 mb-4">
+                      <img
+                        className="w-12 h-auto"
+                        src={orderItem.Product.images[0].url}
+                        alt="foto do pedido"
+                      />
+                      <div className="w-full">
+                        <p className="text-ellipsis line-clamp-2 leading-4 text-sm mb-3">
+                          {orderItem.Product.name}
+                        </p>
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs">
+                            Quantidade: {orderItem.quantity}
+                          </span>
+                          <span className="text-sm">
+                            {formatCurrency(orderItem.price)}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  )
+                })}
                 <Separator className="bg-slate-600 my-6" />
-                <OrderStatusBar />
+                <OrderStatusBar
+                  currStep="ACCEPTED"
+                  date={orderResponse?.order.createdAt || ''}
+                />
               </section>
             </div>
 
@@ -99,15 +122,23 @@ export default function FinishOrderPage() {
                 <Separator className="bg-slate-600 my-3" />
                 <div className="flex justify-between items-center text-sm mb-3">
                   <span>Total Produto(s):</span>
-                  <span>R$ 2.199,99</span>
+                  <span>
+                    {orderResponse &&
+                      formatCurrency(orderResponse.order.subTotal)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-sm mb-3">
                   <span>Frete:</span>
-                  <span>R$ 49,99</span>
+                  <span>
+                    {orderResponse &&
+                      formatCurrency(orderResponse.order.totalFreight)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center bg-slate-600 py-1 text-sm font-bold">
                   <span>Total do Pedido:</span>
-                  <span>R$ 2.149,99</span>
+                  <span>
+                    {orderResponse && formatCurrency(orderResponse.order.total)}
+                  </span>
                 </div>
               </section>
 

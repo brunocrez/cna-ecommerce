@@ -8,7 +8,7 @@ type OrderResponseType = {
   total: number
   subTotal: number
   totalFreight: number
-  createdAt: Date
+  createdAt: string
 }
 
 type OrderProductsType = {
@@ -29,4 +29,9 @@ export type CreateOrderResponseType = {
 export type CreateOrderRequestType = {
   items: ProductItemType[]
   user: LoggedUserType
+}
+
+export type UpdateOrderRequestType = {
+  userId: string
+  status: string
 }
