@@ -59,60 +59,80 @@ export default function CheckoutPage() {
                   <CheckCircleIcon className="size-7" />
                   <h2 className="text-xl font-bold">Revisão do Pedido</h2>
 
-                  <Button
-                    className="hidden sm:flex ml-auto uppercase items-center p-4 text-xs tracking-widest"
-                    size={'sm'}
-                  >
-                    <TrashIcon className="size-5 mr-2" />
-                    <span className="hidden md:block">
-                      remover todos os produtos
-                    </span>
-                    <span className="md:hidden">remover todos</span>
-                  </Button>
+                  {isPending ? (
+                    <Skeleton className="hidden sm:block w-[270px] h-[36px] ml-auto" />
+                  ) : (
+                    <Button
+                      className="hidden sm:flex ml-auto uppercase items-center p-4 text-xs tracking-widest"
+                      size={'sm'}
+                    >
+                      <TrashIcon className="size-5 mr-2" />
+                      <span className="hidden md:block">
+                        remover todos os produtos
+                      </span>
+                      <span className="md:hidden">remover todos</span>
+                    </Button>
+                  )}
                 </div>
-                {data?.orderItems.map((orderItem) => (
-                  <div className="mb-4 " key={orderItem.id}>
-                    <div className="flex gap-4 mb-3">
-                      <img
-                        className="size-24 rounded-md"
-                        src={orderItem.Product.images[0].url}
-                        alt="imagem pedido"
-                        height={100}
-                        width={70}
-                      />
-                      <div className="flex flex-col gap-1 overflow-hidden">
-                        <span className="text-white text-xs sm:text-sm text-ellipsis line-clamp-2">
-                          {orderItem.Product.name}
-                        </span>
-                        <div className="flex items-center">
-                          <span className="text-gray-200 text-xs sm:text-xl font-bold">
-                            {formatCurrency(orderItem.Product.finalPrice)}
-                          </span>
-                          <Button className="ml-auto bg-transparent hover:bg-transparent">
-                            <TrashIcon className="size-5 sm:size-6 text-red-500" />
-                          </Button>
-                        </div>
 
-                        <div className="flex items-center gap-2">
-                          <Button
-                            className="bg-transparent hover:bg-transparent px-0"
-                            size={'sm'}
-                          >
-                            <MinusCircleIcon className="size-6" />
-                          </Button>
-                          <span className="text-gray-300">1</span>
-                          <Button
-                            className="bg-transparent hover:bg-transparent px-0"
-                            size={'sm'}
-                          >
-                            <PlusCircleIcon className="size-6" />
-                          </Button>
-                        </div>
+                {isPending ? (
+                  <div className="mb-4">
+                    <div className="flex gap-4 mb-3">
+                      <Skeleton className="w-24 h-24" />
+                      <div className="flex flex-col gap-2 flex-1">
+                        <Skeleton className="w-full max-w-[600px] h-[20px]" />
+                        <Skeleton className="w-full max-w-28 h-7" />
+                        <Skeleton className="w-full max-w-20 h-8" />
                       </div>
                     </div>
-                    <Separator className="bg-slate-700 mb-6" />
                   </div>
-                ))}
+                ) : (
+                  <>
+                    {data?.orderItems.map((orderItem) => (
+                      <div className="mb-4" key={orderItem.id}>
+                        <div className="flex gap-4 mb-3">
+                          <img
+                            className="size-24 rounded-md"
+                            src={orderItem.Product.images[0].url}
+                            alt="imagem pedido"
+                            height={100}
+                            width={70}
+                          />
+                          <div className="flex flex-col gap-1 overflow-hidden">
+                            <span className="text-white text-xs sm:text-sm text-ellipsis line-clamp-2">
+                              {orderItem.Product.name}
+                            </span>
+                            <div className="flex items-center">
+                              <span className="text-gray-200 text-xs sm:text-xl font-bold">
+                                {formatCurrency(orderItem.Product.finalPrice)}
+                              </span>
+                              <Button className="ml-auto bg-transparent hover:bg-transparent">
+                                <TrashIcon className="size-5 sm:size-6 text-red-500" />
+                              </Button>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <Button
+                                className="bg-transparent hover:bg-transparent px-0"
+                                size={'sm'}
+                              >
+                                <MinusCircleIcon className="size-6" />
+                              </Button>
+                              <span className="text-gray-300">1</span>
+                              <Button
+                                className="bg-transparent hover:bg-transparent px-0"
+                                size={'sm'}
+                              >
+                                <PlusCircleIcon className="size-6" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                        <Separator className="bg-slate-700 mb-6" />
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
 
               {/* card cupom */}
