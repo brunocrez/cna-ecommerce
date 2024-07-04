@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { useCheckout } from '@/contexts/CheckoutContext'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { formatDateHour } from '@/utils/formateDate'
+import { OrderStatusString } from '@/utils/orderStatus'
 import { HandThumbUpIcon } from '@heroicons/react/24/outline'
 
 export default function FinishOrderPage() {
@@ -29,7 +30,11 @@ export default function FinishOrderPage() {
                   </span>
                 </div>
                 <p className="text-indigo-300 text-sm mt-2">{formatDate}</p>
-                <p className="text-indigo-300 text-sm mt-2">Pedido criado.</p>
+                <p className="text-indigo-300 text-sm mt-2">
+                  {orderResponse &&
+                    OrderStatusString[orderResponse.order.status as string]}
+                  .
+                </p>
               </section>
 
               <Button className="mt-3 w-full flex items-center gap-3 bg-green-500 lg:hidden">
