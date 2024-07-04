@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { forwardRef } from 'react'
 import Link from 'next/link'
 import {
@@ -21,37 +22,37 @@ const MENU_ITEMS = [
   {
     text: 'Home',
     icon: <HomeIcon className={className} />,
-    url: '/product/keyboard-gamer-led-full',
+    url: '/',
   },
   {
     text: 'Notificações',
     icon: <BellIcon className={className} />,
-    url: '/product/keyboard-gamer-led-full',
+    url: '/',
   },
   {
     text: 'Meus Pedidos',
     icon: <ShoppingCartIcon className={className} />,
-    url: '/product/keyboard-gamer-led-full',
+    url: '/',
   },
   {
     text: 'Minha Conta',
     icon: <UserIcon className={className} />,
-    url: '/product/keyboard-gamer-led-full',
+    url: '/',
   },
   {
     text: 'Favoritos',
     icon: <HeartIcon className={className} />,
-    url: '/product/keyboard-gamer-led-full',
+    url: '/',
   },
   {
     text: 'Avaliações',
     icon: <HandThumbUpIcon className={className} />,
-    url: '/product/keyboard-gamer-led-full',
+    url: '/',
   },
   {
     text: 'Ajuda',
     icon: <QuestionMarkCircleIcon className={className} />,
-    url: '/product/keyboard-gamer-led-full',
+    url: '/',
   },
 ]
 
@@ -62,6 +63,7 @@ interface IMenuProps {
 
 export const Menu = forwardRef<HTMLDivElement, IMenuProps>(
   ({ handleClick, isVisible }: IMenuProps, ref) => {
+    const { push } = useRouter()
     return (
       <div
         ref={ref}
@@ -86,6 +88,7 @@ export const Menu = forwardRef<HTMLDivElement, IMenuProps>(
             <li
               key={menuItem.text}
               className="flex gap-4 text-white text-xl hover:bg-slate-600 cursor-pointer p-4 rounded-md"
+              onClick={() => push(menuItem.url)}
             >
               {menuItem.icon}
               <Link href={menuItem.url}>{menuItem.text}</Link>
@@ -93,7 +96,7 @@ export const Menu = forwardRef<HTMLDivElement, IMenuProps>(
           ))}
           <li className="mt-auto flex gap-4 text-red-300 text-xl hover:bg-slate-600 cursor-pointer p-4 rounded-md">
             <ArrowRightStartOnRectangleIcon className={className} />
-            <a href="/product/keyboard-gamer-led-full">Logout</a>
+            <Link href="/">Logout</Link>
           </li>
         </ul>
       </div>
