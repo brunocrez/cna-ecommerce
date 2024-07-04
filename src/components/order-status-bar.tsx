@@ -1,5 +1,4 @@
 import { colorCurrentStep } from '@/utils/colorCurrentStep'
-import { formatDateHour } from '@/utils/formateDate'
 import {
   CheckCircleIcon,
   PaperAirplaneIcon,
@@ -9,7 +8,7 @@ import {
 
 type OrderStatusBarProps = {
   currStep: string
-  date: string
+  date: string | undefined
 }
 
 export function OrderStatusBar({ currStep, date }: OrderStatusBarProps) {
@@ -39,7 +38,7 @@ export function OrderStatusBar({ currStep, date }: OrderStatusBarProps) {
       <div className="flex justify-center items-center gap-3 text-white text-sm">
         <p>
           <span className="font-bold mr-1">Status:</span>
-          Pedido criado - {formatDateHour(date)}
+          Pedido criado - {date}
         </p>
       </div>
     </div>

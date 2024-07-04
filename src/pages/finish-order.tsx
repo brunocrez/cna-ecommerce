@@ -11,7 +11,9 @@ import { HandThumbUpIcon } from '@heroicons/react/24/outline'
 
 export default function FinishOrderPage() {
   const { orderResponse } = useCheckout()
-  console.log(orderResponse)
+  const formatDate =
+    orderResponse && formatDateHour(orderResponse.order.createdAt)
+
   return (
     <div className="bg-slate-800">
       <Header />
@@ -26,10 +28,7 @@ export default function FinishOrderPage() {
                     {orderResponse?.order.id}
                   </span>
                 </div>
-                <p className="text-indigo-300 text-sm mt-2">
-                  {orderResponse &&
-                    formatDateHour(orderResponse.order.createdAt)}
-                </p>
+                <p className="text-indigo-300 text-sm mt-2">{formatDate}</p>
                 <p className="text-indigo-300 text-sm mt-2">Pedido criado.</p>
               </section>
 
@@ -101,10 +100,7 @@ export default function FinishOrderPage() {
                   )
                 })}
                 <Separator className="bg-slate-600 my-6" />
-                <OrderStatusBar
-                  currStep="ACCEPTED"
-                  date={orderResponse?.order.createdAt || ''}
-                />
+                <OrderStatusBar currStep="ACCEPTED" date={formatDate} />
               </section>
             </div>
 
