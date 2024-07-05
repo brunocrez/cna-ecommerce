@@ -1,5 +1,5 @@
 import { updateOrder } from '@/services/updateOrder'
-import { UseMutationResult, useMutation } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 type UpdateOrderRequestType = {
   userId: string

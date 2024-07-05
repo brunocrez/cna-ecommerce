@@ -17,6 +17,7 @@ const loggedUser = {
   userId: '0f6dfca3-5385-4449-b476-41d84a17bd3a',
   addresses: [
     {
+      id: 'e76d5b88-16ae-4340-8f19-84e7fa3f4390',
       street: 'Rua das Amoras',
       city: 'Uberlândia',
       state: 'MG',

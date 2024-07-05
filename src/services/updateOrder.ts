@@ -1,14 +1,14 @@
 import { AxiosResponse } from 'axios'
 import { api } from './api/api-routes'
 import {
-  CreateOrderResponseType,
+  UpdateOrderResponseType,
   UpdateOrderRequestType,
 } from '@/interfaces/Order'
 
 export async function updateOrder(
   payload: UpdateOrderRequestType,
-): Promise<CreateOrderResponseType> {
-  const response: AxiosResponse<CreateOrderResponseType> = await api.put(
+): Promise<UpdateOrderResponseType> {
+  const response: AxiosResponse<UpdateOrderResponseType> = await api.put(
     '/orders',
     payload,
   )

@@ -1,5 +1,6 @@
+import { IAddress } from './Address'
 import { IProduct, ProductItemType } from './Product'
-import { LoggedUserType } from './User'
+import { IUser, LoggedUserType } from './User'
 
 type OrderResponseType = {
   id: string
@@ -34,4 +35,9 @@ export type CreateOrderRequestType = {
 export type UpdateOrderRequestType = {
   userId: string
   status: string
+}
+
+export type UpdateOrderResponseType = CreateOrderResponseType & {
+  address: IAddress
+  user: IUser
 }

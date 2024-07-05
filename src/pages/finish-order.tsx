@@ -5,6 +5,7 @@ import { OrderStatusBar } from '@/components/order-status-bar'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useCheckout } from '@/contexts/CheckoutContext'
+import { formatAddress } from '@/utils/formatAddress'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { formatDateHour } from '@/utils/formateDate'
 import { OrderStatusString } from '@/utils/orderStatus'
@@ -44,9 +45,9 @@ export default function FinishOrderPage() {
 
               <section className="bg-slate-700 rounded-md p-6 mt-3 text-white lg:hidden">
                 <h2 className="text-lg font-bold mb-2">Entrega</h2>
-                <p className="text-sm font-bold">Bruno da Costa Rezende</p>
+                <p className="text-sm font-bold">{orderResponse?.user.name}</p>
                 <p className="text-sm leading-5">
-                  Avenida Cesário Alvim, 3114, AP 102, Uberlândia, MG
+                  {orderResponse && formatAddress(orderResponse.address)}
                 </p>
               </section>
 
@@ -111,9 +112,9 @@ export default function FinishOrderPage() {
 
             <div className="hidden lg:block w-full max-w-96">
               <section className="bg-slate-700 rounded-md p-6 text-white">
-                <p className="text-sm font-bold">Bruno da Costa Rezende</p>
+                <p className="text-sm font-bold">{orderResponse?.user.name}</p>
                 <p className="text-sm leading-5">
-                  Avenida Cesário Alvim, 3114, AP 102, Uberlândia, MG
+                  {orderResponse && formatAddress(orderResponse.address)}
                 </p>
 
                 <Separator className="bg-slate-600 my-3" />

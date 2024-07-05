@@ -7,10 +7,11 @@ import { CreateOrderResponseType } from '@/interfaces/Order'
 export async function createOrder(
   user: LoggedUserType,
   items: ProductItemType[],
+  addressId: string,
 ): Promise<CreateOrderResponseType> {
   const response: AxiosResponse<CreateOrderResponseType> = await api.post(
     '/orders',
-    { user, items },
+    { user, items, addressId },
   )
   return response.data
 }

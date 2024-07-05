@@ -31,12 +31,16 @@ export default function CheckoutPage() {
   const { data, isPending } = useCreateOrder(
     quickPurchase?.user ?? ({} as LoggedUserType),
     quickPurchase?.items ?? [],
+    quickPurchase?.user.addresses[0].id ?? '',
     !!quickPurchase?.user.userId && quickPurchase?.items.length > 0,
   )
   const { triggerMutation, data: orderResponse, isSuccess } = useUpdateOrder()
 
   function handleFinishOrder() {
-    triggerMutation({ userId: user.userId, status: OrderStatus.ACCEPTED })
+    triggerMutation({
+      userId: user.userId,
+      status: OrderStatus.ACCEPTED,
+    })
   }
 
   useEffect(() => {

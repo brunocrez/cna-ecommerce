@@ -6,11 +6,12 @@ import { useQuery } from '@tanstack/react-query'
 export const useCreateOrder = (
   user: LoggedUserType,
   items: ProductItemType[],
+  addressId: string,
   enabled: boolean,
 ) => {
   return useQuery({
     queryKey: [`createOrder-${user.userId}-${items[0]?.productId}`],
-    queryFn: () => createOrder(user, items),
+    queryFn: () => createOrder(user, items, addressId),
     enabled,
     refetchOnWindowFocus: false,
   })

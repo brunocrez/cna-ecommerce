@@ -1,7 +1,7 @@
 import { DeliveryOptionType } from '@/interfaces/DeliveryOptions'
 import {
   CreateOrderRequestType,
-  CreateOrderResponseType,
+  UpdateOrderResponseType,
 } from '@/interfaces/Order'
 import {
   Dispatch,
@@ -20,9 +20,9 @@ type CheckoutContextType = {
   setDeliveryOption: Dispatch<SetStateAction<DeliveryOptionType | null>>
   quickPurchase: CreateOrderRequestType | null
   setQuickPurchase: Dispatch<SetStateAction<CreateOrderRequestType | null>>
-  orderResponse: CreateOrderResponseType | undefined
+  orderResponse: UpdateOrderResponseType | undefined
   setOrderResponse: Dispatch<
-    SetStateAction<CreateOrderResponseType | undefined>
+    SetStateAction<UpdateOrderResponseType | undefined>
   >
 }
 
@@ -42,7 +42,7 @@ export function CheckoutProvider({ children }: CheckoutProviderProps) {
   const [quickPurchase, setQuickPurchase] =
     useState<CreateOrderRequestType | null>(null)
   const [orderResponse, setOrderResponse] = useState<
-    CreateOrderResponseType | undefined
+    UpdateOrderResponseType | undefined
   >(undefined)
 
   return (
