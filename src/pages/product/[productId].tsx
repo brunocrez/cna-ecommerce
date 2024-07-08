@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import {
   ChatBubbleLeftIcon,
@@ -31,6 +32,10 @@ import { useComments } from '@/hooks/useComments'
 import { ZipCode } from '@/components/zip-code'
 import { useCheckout } from '@/contexts/CheckoutContext'
 import { useAuth } from '@/contexts/AuthContext'
+import { useCreateCartItem } from '@/hooks/useCreateCartItem'
+import { useToast } from '@/components/ui/use-toast'
+import { Toaster } from '@/components/ui/toaster'
+import { Spinner } from '@/components/spinner'
 
 export default function ProductPage() {
   const router = useRouter()
@@ -41,6 +46,8 @@ export default function ProductPage() {
   const { user } = useAuth()
   const { zipCode, zipError, setZipError, deliveryOption, setQuickPurchase } =
     useCheckout()
+  const { triggerMutation, isSuccess, isPending } = useCreateCartItem()
+  const { toast } = useToast()
 
   const handleClickPurchase = () => {
     if (!zipCode || zipError || !deliveryOption) {
@@ -55,8 +62,23 @@ export default function ProductPage() {
     router.push('/checkout')
   }
 
+  const handleClickAddItem = () => {
+    triggerMutation({ productId, userId: user.userId, quantity: 1 })
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        description: 'Produto adicionado à sacola com sucesso!',
+        duration: 3000,
+        className: 'bg-green-600 text-gray-100 text-xl border-green-700',
+      })
+    }
+  }, [isSuccess])
+
   return (
     <div className="bg-slate-800">
+      <Toaster />
       <Header />
       <div className="h-full py-6 px-3">
         <Container>
@@ -153,8 +175,16 @@ export default function ProductPage() {
                 <ShoppingCartIcon className="size-7" />
                 <span className="text-lg font-bold">Comprar</span>
               </Button>
-              <Button className="bg-indigo-800 text-white h-12">
-                <span className="text-sm font-bold">Adicionar ao Carrinho</span>
+              <Button
+                className="bg-indigo-800 text-white h-12"
+                onClick={handleClickAddItem}
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <Spinner />
+                ) : (
+                  <span className="text-sm font-bold">Adicionar à Sacola</span>
+                )}
               </Button>
             </div>
           </section>
@@ -194,10 +224,11 @@ export default function ProductPage() {
                   <ShoppingCartIcon className="size-7" />
                   <span className="text-lg font-bold">Comprar</span>
                 </Button>
-                <Button className="bg-indigo-800 text-white h-12">
-                  <span className="text-sm font-bold">
-                    Adicionar ao Carrinho
-                  </span>
+                <Button
+                  className="bg-indigo-800 text-white h-12"
+                  onClick={handleClickAddItem}
+                >
+                  <span className="text-sm font-bold">Adicionar à Sacola</span>
                 </Button>
               </div>
             </div>
