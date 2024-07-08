@@ -1,4 +1,4 @@
 export const Routes = {
   HOME: '/',
-  CART: 'my-account/cart',
+  CART: '/my-account/cart',
 }
