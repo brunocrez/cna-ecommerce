@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { Input } from './ui/input'
 import {
@@ -11,8 +11,10 @@ import {
 import { Menu } from './menu'
 import { Container } from './container'
 import { Overlay } from './overlay'
+import { Routes } from '@/utils/routes'
 
 export function Header() {
+  const { push } = useRouter()
   const [isVisible, setIsVisible] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -52,8 +54,11 @@ export function Header() {
                 className="size-8 text-white cursor-pointer self-center"
                 onClick={handleClickMenu}
               />
-              <div className="flex items-center gap-3">
-                <Image
+              <div
+                className="flex items-center gap-3 cursor-pointer"
+                onClick={() => push(Routes.HOME)}
+              >
+                <img
                   src="/images/logo.png"
                   alt="logo"
                   width={40}
@@ -72,7 +77,10 @@ export function Header() {
               <UserIcon className="size-8 cursor-pointer" />
               <ShoppingCartIcon className="size-8 cursor-pointer" />
               <HeartIcon className="size-8 cursor-pointer" />
-              <ShoppingBagIcon className="size-8 cursor-pointer" />
+              <ShoppingBagIcon
+                className="size-8 cursor-pointer"
+                onClick={() => push(Routes.CART)}
+              />
             </div>
           </div>
         </Container>
@@ -86,7 +94,7 @@ export function Header() {
             onClick={handleClickMenu}
           />
           <div className="flex items-center gap-3">
-            <Image
+            <img
               src="/images/logo.png"
               alt="logo"
               width={40}
@@ -99,7 +107,10 @@ export function Header() {
             <UserIcon className="size-8 cursor-pointer" />
             <ShoppingCartIcon className="size-8 cursor-pointer" />
             <HeartIcon className="size-8 cursor-pointer" />
-            <ShoppingBagIcon className="size-8 cursor-pointer" />
+            <ShoppingBagIcon
+              className="size-8 cursor-pointer"
+              onClick={() => push(Routes.CART)}
+            />
           </div>
         </div>
         <Input type="text" placeholder="Buscar um produto" className="w-full" />
@@ -111,7 +122,7 @@ export function Header() {
           className="size-8 text-white cursor-pointer"
           onClick={handleClickMenu}
         />
-        <Image
+        <img
           src="/images/logo.png"
           alt="logo"
           width={40}
@@ -123,7 +134,10 @@ export function Header() {
           placeholder="Buscar um produto"
           className="w-full max-w-[500px]"
         />
-        <ShoppingBagIcon className="size-8 text-gray-300 cursor-pointer" />
+        <ShoppingBagIcon
+          className="size-8 text-gray-300 cursor-pointer"
+          onClick={() => push(Routes.CART)}
+        />
       </div>
 
       <Menu isVisible={isVisible} ref={menuRef} handleClick={handleClickMenu} />

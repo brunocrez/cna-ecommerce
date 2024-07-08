@@ -15,6 +15,7 @@ import {
   ShoppingBagIcon,
 } from '@heroicons/react/24/outline'
 import { Separator } from './ui/separator'
+import { Routes } from '@/utils/routes'
 
 const className = 'size-7'
 
@@ -22,7 +23,7 @@ const MENU_ITEMS = [
   {
     text: 'Home',
     icon: <HomeIcon className={className} />,
-    url: '/',
+    url: Routes.HOME,
   },
   {
     text: 'Notificações',
@@ -78,7 +79,10 @@ export const Menu = forwardRef<HTMLDivElement, IMenuProps>(
           />
           <div className="flex gap-4">
             <UserCircleIcon className="size-8 text-white cursor-pointer" />
-            <ShoppingBagIcon className="size-8 text-white cursor-pointer" />
+            <ShoppingBagIcon
+              className="size-8 text-white cursor-pointer"
+              onClick={() => push(Routes.CART)}
+            />
           </div>
         </div>
         <Separator className="my-6 bg-slate-700" />
