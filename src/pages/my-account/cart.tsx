@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import { CartLoader } from '@/components/cart-loader'
 import { Container } from '@/components/container'
+import { CounterInput } from '@/components/counter-input'
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
 import { Spinner } from '@/components/spinner'
@@ -11,25 +13,50 @@ import { useToast } from '@/components/ui/use-toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCartItems } from '@/hooks/useCartItems'
 import { useDeleteCartItem } from '@/hooks/useDeleteCartItem'
+import { useUpdateCartItem } from '@/hooks/useUpdateCartItem'
 import { formatCurrency } from '@/utils/formatCurrency'
-import {
-  DocumentTextIcon,
-  MinusCircleIcon,
-  PlusCircleIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline'
-import { useEffect } from 'react'
+import { DocumentTextIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { useCheckout } from '@/contexts/CheckoutContext'
 
 export default function CartPage() {
   const { user } = useAuth()
-  const { data, isLoading } = useCartItems(user?.userId, !!user.userId)
-  const { isPending, isSuccess, triggerMutation } = useDeleteCartItem()
+  const { setCartItems } = useCheckout()
+  const { data: cartItems, isLoading } = useCartItems(
+    user?.userId,
+    !!user.userId,
+  )
+  const {
+    isPending: isPendingDelete,
+    isSuccess,
+    triggerDelete,
+  } = useDeleteCartItem()
   const { toast } = useToast()
+  const {
+    isPending: isPendingUpdate,
+    triggerUpdate,
+    data: updateCartItems,
+  } = useUpdateCartItem()
+  const [itemClicked, setItemClicked] = useState<string>('')
 
   const cardTitle =
-    data && data.totalItems < 2 ? '1 item' : `${data?.totalItems} itens`
+    cartItems && cartItems.totalItems < 2
+      ? '1 item'
+      : `${cartItems?.totalItems} itens`
 
-  const height = data && data?.totalItems < 4 ? 'h-screen' : 'h-full'
+  const height =
+    cartItems && cartItems?.items.length < 4 ? 'h-screen' : 'h-full'
+
+  const handleClickPlus = (cartItemId: string, quantity: number) => {
+    triggerUpdate({ cartItemId, quantity })
+    setItemClicked(cartItemId)
+    setCartItems(cartItems)
+  }
+
+  const handleClickMinus = (cartItemId: string, quantity: number) => {
+    triggerUpdate({ cartItemId, quantity })
+    setItemClicked(cartItemId)
+    setCartItems(cartItems)
+  }
 
   useEffect(() => {
     if (isSuccess) {
@@ -52,7 +79,7 @@ export default function CartPage() {
                 <CartLoader />
               ) : (
                 <>
-                  {data?.items.map((cartItem) => {
+                  {cartItems?.items.map((cartItem) => {
                     return (
                       <div
                         key={cartItem.productId}
@@ -79,28 +106,31 @@ export default function CartPage() {
                           </div>
                         </div>
                         <div className="flex justify-between">
-                          <div className="flex items-center gap-2 lg:ml-auto mr-8">
-                            <Button
-                              className="bg-transparent hover:bg-transparent px-0"
-                              size="sm"
-                            >
-                              <MinusCircleIcon className="size-6" />
-                            </Button>
-                            <span className="text-gray-300">1</span>
-                            <Button
-                              className="bg-transparent hover:bg-transparent px-0"
-                              size="sm"
-                            >
-                              <PlusCircleIcon className="size-6" />
-                            </Button>
-                          </div>
+                          <CounterInput
+                            onClickPlus={() =>
+                              handleClickPlus(
+                                cartItem.id,
+                                cartItem.quantity + 1,
+                              )
+                            }
+                            onClickMinus={() =>
+                              handleClickMinus(
+                                cartItem.id,
+                                cartItem.quantity - 1,
+                              )
+                            }
+                            value={cartItem.quantity}
+                            isLoading={
+                              isPendingUpdate && cartItem.id === itemClicked
+                            }
+                          />
                           <Button
                             size="sm"
-                            onClick={() => triggerMutation(cartItem.id)}
-                            disabled={isPending}
+                            onClick={() => triggerDelete(cartItem.id)}
+                            disabled={isPendingDelete}
                           >
                             <span className="mr-2">Excluir</span>
-                            {isPending ? (
+                            {isPendingDelete && cartItem.id === itemClicked ? (
                               <Spinner size="sm" />
                             ) : (
                               <TrashIcon className="size-5 text-white" />
@@ -131,7 +161,7 @@ export default function CartPage() {
                     <Skeleton className="w-24 h-6" />
                   ) : (
                     <span className="text-lg font-bold text-green-600">
-                      {data && formatCurrency(data.totalPrice)}
+                      {cartItems && formatCurrency(cartItems.totalPrice)}
                     </span>
                   )}
                 </div>
@@ -166,7 +196,7 @@ export default function CartPage() {
                 <Skeleton className="w-24 h-6" />
               ) : (
                 <span className="text-green-600 font-bold text-lg">
-                  {data && formatCurrency(data.totalPrice)}
+                  {cartItems && formatCurrency(cartItems.totalPrice)}
                 </span>
               )}
             </div>

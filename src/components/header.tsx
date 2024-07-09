@@ -12,9 +12,11 @@ import { Menu } from './menu'
 import { Container } from './container'
 import { Overlay } from './overlay'
 import { Routes } from '@/utils/routes'
+import { useCheckout } from '@/contexts/CheckoutContext'
 
 export function Header() {
   const { push } = useRouter()
+  const { cartItems } = useCheckout()
   const [isVisible, setIsVisible] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -77,10 +79,16 @@ export function Header() {
               <UserIcon className="size-8 cursor-pointer" />
               <ShoppingCartIcon className="size-8 cursor-pointer" />
               <HeartIcon className="size-8 cursor-pointer" />
-              <ShoppingBagIcon
-                className="size-8 cursor-pointer"
-                onClick={() => push(Routes.CART)}
-              />
+              <div className="relative" onClick={() => push(Routes.CART)}>
+                <ShoppingBagIcon className="size-8 cursor-pointer" />
+                {cartItems && cartItems.totalItems > 0 && (
+                  <div className="absolute -right-1 -bottom-2 bg-indigo-800 rounded-full w-5 h-5 flex items-center justify-center cursor-pointer">
+                    <span className="text-xs text-white">
+                      {cartItems?.totalItems}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </Container>
@@ -107,10 +115,19 @@ export function Header() {
             <UserIcon className="size-8 cursor-pointer" />
             <ShoppingCartIcon className="size-8 cursor-pointer" />
             <HeartIcon className="size-8 cursor-pointer" />
-            <ShoppingBagIcon
-              className="size-8 cursor-pointer"
-              onClick={() => push(Routes.CART)}
-            />
+            <div className="relative">
+              <ShoppingBagIcon
+                className="size-8 cursor-pointer"
+                onClick={() => push(Routes.CART)}
+              />
+              {cartItems && cartItems.totalItems > 0 && (
+                <div className="absolute -right-1 -bottom-2 bg-indigo-800 rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="text-xs text-white">
+                    {cartItems?.totalItems}
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <Input type="text" placeholder="Buscar um produto" className="w-full" />
@@ -134,10 +151,19 @@ export function Header() {
           placeholder="Buscar um produto"
           className="w-full max-w-[500px]"
         />
-        <ShoppingBagIcon
-          className="size-8 text-gray-300 cursor-pointer"
-          onClick={() => push(Routes.CART)}
-        />
+        <div className="relative">
+          <ShoppingBagIcon
+            className="size-8 text-gray-300 cursor-pointer"
+            onClick={() => push(Routes.CART)}
+          />
+          {cartItems && cartItems.totalItems > 0 && (
+            <div className="absolute -right-1 -bottom-2 bg-indigo-800 rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="text-xs text-white">
+                {cartItems?.totalItems}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
 
       <Menu isVisible={isVisible} ref={menuRef} handleClick={handleClickMenu} />

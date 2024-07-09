@@ -21,3 +21,10 @@ export type GetCartItemResponseType = {
   totalItems: number
   totalPrice: number
 }
+
+export type UpdateCartItemResponseType = Omit<CartItems, 'product'>
+
+export type UpdateCartItemRequestType = {
+  cartItemId: string
+  quantity: number
+}

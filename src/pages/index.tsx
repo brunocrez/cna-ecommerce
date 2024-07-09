@@ -9,10 +9,24 @@ import {
 import { Footer } from '@/components/footer'
 import { HomeSection } from '@/components/home-section'
 import { ProductGroups } from '@/utils/productGroups'
+import { useCheckout } from '@/contexts/CheckoutContext'
+import { useCartItems } from '@/hooks/useCartItems'
+import { useAuth } from '@/contexts/AuthContext'
+import { useEffect } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const { user } = useAuth()
+  const { setCartItems } = useCheckout()
+  const { data } = useCartItems(user.userId, !!user?.name)
+
+  useEffect(() => {
+    if (data) {
+      setCartItems(data)
+    }
+  }, [data])
+
   return (
     <main>
       <Header />

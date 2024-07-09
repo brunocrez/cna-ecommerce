@@ -12,9 +12,9 @@ export const useDeleteCartItem = () => {
     },
   })
 
-  const triggerMutation = (cartItemId: string) => {
+  const triggerDelete = (cartItemId: string) => {
     mutation.mutate(cartItemId)
   }
 
-  return { ...mutation, triggerMutation }
+  return { ...mutation, triggerDelete }
 }

@@ -36,6 +36,11 @@ const MENU_ITEMS = [
     url: '/',
   },
   {
+    text: 'Minha Sacola',
+    icon: <ShoppingBagIcon className={className} />,
+    url: Routes.CART,
+  },
+  {
     text: 'Minha Conta',
     icon: <UserIcon className={className} />,
     url: '/',
@@ -77,13 +82,7 @@ export const Menu = forwardRef<HTMLDivElement, IMenuProps>(
             className="size-8 text-white cursor-pointer"
             onClick={handleClick}
           />
-          <div className="flex gap-4">
-            <UserCircleIcon className="size-8 text-white cursor-pointer" />
-            <ShoppingBagIcon
-              className="size-8 text-white cursor-pointer"
-              onClick={() => push(Routes.CART)}
-            />
-          </div>
+          <UserCircleIcon className="size-8 text-white cursor-pointer" />
         </div>
         <Separator className="my-6 bg-slate-700" />
 

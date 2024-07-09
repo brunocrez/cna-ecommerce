@@ -45,9 +45,20 @@ export default function ProductPage() {
   const { data: comments } = useComments(productId, !!productId)
 
   const { user } = useAuth()
-  const { zipCode, zipError, setZipError, deliveryOption, setQuickPurchase } =
-    useCheckout()
-  const { triggerMutation, isSuccess, isPending } = useCreateCartItem()
+  const {
+    zipCode,
+    zipError,
+    setZipError,
+    deliveryOption,
+    setQuickPurchase,
+    setCartItems,
+  } = useCheckout()
+  const {
+    triggerMutation,
+    isSuccess,
+    isPending,
+    data: cartItems,
+  } = useCreateCartItem()
   const { toast } = useToast()
 
   const handleClickPurchase = () => {
@@ -74,6 +85,8 @@ export default function ProductPage() {
         duration: 3000,
         className: 'bg-green-600 text-gray-100 text-xl border-green-700',
       })
+
+      setCartItems(cartItems)
     }
   }, [isSuccess])
 
