@@ -2,11 +2,15 @@ import { CartLoader } from '@/components/cart-loader'
 import { Container } from '@/components/container'
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Toaster } from '@/components/ui/toaster'
+import { useToast } from '@/components/ui/use-toast'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCartItems } from '@/hooks/useCartItems'
+import { useDeleteCartItem } from '@/hooks/useDeleteCartItem'
 import { formatCurrency } from '@/utils/formatCurrency'
 import {
   DocumentTextIcon,
@@ -14,18 +18,33 @@ import {
   PlusCircleIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline'
+import { useEffect } from 'react'
 
 export default function CartPage() {
   const { user } = useAuth()
   const { data, isLoading } = useCartItems(user?.userId, !!user.userId)
+  const { isPending, isSuccess, triggerMutation } = useDeleteCartItem()
+  const { toast } = useToast()
 
   const cardTitle =
     data && data.totalItems < 2 ? '1 item' : `${data?.totalItems} itens`
 
+  const height = data && data?.totalItems < 4 ? 'h-screen' : 'h-full'
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        description: 'O item foi removida da sacola com sucesso!',
+        duration: 3000,
+      })
+    }
+  }, [isSuccess])
+
   return (
     <div className="bg-slate-800">
+      <Toaster />
       <Header />
-      <div className="h-screen py-6 px-3">
+      <div className={`${height} py-6 px-3`}>
         <Container>
           <div className="flex gap-3">
             <div className="flex-1">
@@ -35,7 +54,10 @@ export default function CartPage() {
                 <>
                   {data?.items.map((cartItem) => {
                     return (
-                      <div className="bg-slate-700 rounded-md p-4 mb-4">
+                      <div
+                        key={cartItem.productId}
+                        className="bg-slate-700 rounded-md p-4 mb-4"
+                      >
                         <div className="flex gap-2 mb-5">
                           <img
                             src={cartItem.product.images[0].url}
@@ -72,9 +94,17 @@ export default function CartPage() {
                               <PlusCircleIcon className="size-6" />
                             </Button>
                           </div>
-                          <Button size="sm">
+                          <Button
+                            size="sm"
+                            onClick={() => triggerMutation(cartItem.id)}
+                            disabled={isPending}
+                          >
                             <span className="mr-2">Excluir</span>
-                            <TrashIcon className="size-5 text-white" />
+                            {isPending ? (
+                              <Spinner size="sm" />
+                            ) : (
+                              <TrashIcon className="size-5 text-white" />
+                            )}
                           </Button>
                         </div>
                       </div>

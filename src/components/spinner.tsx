@@ -1,9 +1,27 @@
-export function Spinner() {
+type SpinnerProps = {
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+}
+export function Spinner({ size = 'md' }: SpinnerProps) {
+  const setSize = (size: string) => {
+    switch (size) {
+      case 'sm':
+        return 'w-4 h-4'
+      case 'lg':
+        return 'w-8 h-8'
+      case 'xl':
+        return 'w-10 h-10'
+      default:
+        return 'w-6 h-6'
+    }
+  }
+
   return (
     <div role="status">
       <svg
         aria-hidden="true"
-        className="w-8 h-8 text-gray-400 animate-spin dark:text-gray-600 fill-white"
+        className={`${setSize(
+          size,
+        )} text-gray-400 animate-spin dark:text-gray-600 fill-white`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

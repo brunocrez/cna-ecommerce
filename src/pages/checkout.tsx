@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import {
   MinusCircleIcon,
@@ -22,7 +23,7 @@ import { LoggedUserType } from '@/interfaces/User'
 import { useUpdateOrder } from '@/hooks/useUpdateOrder'
 import { useAuth } from '@/contexts/AuthContext'
 import { OrderStatus } from '@/utils/orderStatus'
-import { useEffect } from 'react'
+import { Routes } from '@/utils/routes'
 
 export default function CheckoutPage() {
   const { push } = useRouter()
@@ -46,7 +47,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (isSuccess && orderResponse) {
       setOrderResponse(orderResponse)
-      push('/finish-order')
+      push(Routes.FINISH_ORDER)
     }
   }, [isSuccess, orderResponse])
 

@@ -36,6 +36,7 @@ import { useCreateCartItem } from '@/hooks/useCreateCartItem'
 import { useToast } from '@/components/ui/use-toast'
 import { Toaster } from '@/components/ui/toaster'
 import { Spinner } from '@/components/spinner'
+import { Routes } from '@/utils/routes'
 
 export default function ProductPage() {
   const router = useRouter()
@@ -59,7 +60,7 @@ export default function ProductPage() {
       items: [{ productId, quantity: 1, freight: deliveryOption }],
     })
 
-    router.push('/checkout')
+    router.push(Routes.CHECKOUT)
   }
 
   const handleClickAddItem = () => {
