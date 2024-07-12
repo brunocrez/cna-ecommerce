@@ -16,26 +16,20 @@ import { useDeleteCartItem } from '@/hooks/useDeleteCartItem'
 import { useUpdateCartItem } from '@/hooks/useUpdateCartItem'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { DocumentTextIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { useCheckout } from '@/contexts/CheckoutContext'
 
 export default function CartPage() {
   const { user } = useAuth()
-  const { setCartItems } = useCheckout()
   const { data: cartItems, isLoading } = useCartItems(
     user?.userId,
     !!user.userId,
   )
-  const {
-    isPending: isPendingDelete,
-    isSuccess,
-    triggerDelete,
-  } = useDeleteCartItem()
   const { toast } = useToast()
   const {
-    isPending: isPendingUpdate,
-    triggerUpdate,
-    data: updateCartItems,
-  } = useUpdateCartItem()
+    isPending: isPendingDelete,
+    isSuccess: isSuccessDelete,
+    triggerDelete,
+  } = useDeleteCartItem()
+  const { isPending: isPendingUpdate, triggerUpdate } = useUpdateCartItem()
   const [itemClicked, setItemClicked] = useState<string>('')
 
   const cardTitle =
@@ -46,26 +40,26 @@ export default function CartPage() {
   const height =
     cartItems && cartItems?.items.length < 4 ? 'h-screen' : 'h-full'
 
+  const showSkeleton = isLoading || isPendingDelete || isPendingUpdate
+
   const handleClickPlus = (cartItemId: string, quantity: number) => {
     triggerUpdate({ cartItemId, quantity })
     setItemClicked(cartItemId)
-    setCartItems(cartItems)
   }
 
   const handleClickMinus = (cartItemId: string, quantity: number) => {
     triggerUpdate({ cartItemId, quantity })
     setItemClicked(cartItemId)
-    setCartItems(cartItems)
   }
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccessDelete) {
       toast({
         description: 'O item foi removida da sacola com sucesso!',
         duration: 3000,
       })
     }
-  }, [isSuccess])
+  }, [isSuccessDelete])
 
   return (
     <div className="bg-slate-800">
@@ -148,7 +142,7 @@ export default function CartPage() {
               <div className="bg-slate-700 p-6 rounded-md text-white">
                 <div className="flex items-center text-gray-300 gap-2 mb-6">
                   <DocumentTextIcon className="size-6" />
-                  {isLoading ? (
+                  {showSkeleton ? (
                     <Skeleton className="h-7 w-full max-w-[160px]" />
                   ) : (
                     <h2 className="font-bold text-xl">Resumo ({cardTitle})</h2>
@@ -157,7 +151,7 @@ export default function CartPage() {
                 <Separator className="bg-slate-600 my-4" />
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  {isLoading ? (
+                  {showSkeleton ? (
                     <Skeleton className="w-24 h-6" />
                   ) : (
                     <span className="text-lg font-bold text-green-600">
@@ -169,7 +163,7 @@ export default function CartPage() {
 
               <Button
                 onClick={() => {}}
-                disabled={isLoading}
+                disabled={showSkeleton}
                 size="lg"
                 className="bg-green-600 font-bold text-lg"
               >
@@ -181,7 +175,7 @@ export default function CartPage() {
           <div className="bg-slate-700 rounded-md p-4 text-white lg:hidden">
             <div className="flex items-center text-gray-300 gap-2 mb-6">
               <DocumentTextIcon className="size-6" />
-              {isLoading ? (
+              {showSkeleton ? (
                 <Skeleton className="h-7 w-full max-w-[160px]" />
               ) : (
                 <h2 className="font-bold text-xl">Resumo ({cardTitle})</h2>
@@ -192,7 +186,7 @@ export default function CartPage() {
 
             <div className="flex items-center justify-between text-gray-200">
               <h2>Subtotal</h2>
-              {isLoading ? (
+              {showSkeleton ? (
                 <Skeleton className="w-24 h-6" />
               ) : (
                 <span className="text-green-600 font-bold text-lg">
