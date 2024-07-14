@@ -5,7 +5,6 @@ import {
   useContext,
   useState,
 } from 'react'
-import { GetCartItemResponseType } from '@/interfaces/Cart'
 import { DeliveryOptionType } from '@/interfaces/DeliveryOptions'
 import {
   CreateOrderRequestType,
@@ -25,8 +24,6 @@ type CheckoutContextType = {
   setOrderResponse: Dispatch<
     SetStateAction<UpdateOrderResponseType | undefined>
   >
-  cartItems: GetCartItemResponseType | undefined
-  setCartItems: Dispatch<SetStateAction<GetCartItemResponseType | undefined>>
 }
 
 const CheckoutContext = createContext<CheckoutContextType>(
@@ -47,9 +44,6 @@ export function CheckoutProvider({ children }: CheckoutProviderProps) {
   const [orderResponse, setOrderResponse] = useState<
     UpdateOrderResponseType | undefined
   >(undefined)
-  const [cartItems, setCartItems] = useState<
-    GetCartItemResponseType | undefined
-  >(undefined)
 
   return (
     <CheckoutContext.Provider
@@ -64,8 +58,6 @@ export function CheckoutProvider({ children }: CheckoutProviderProps) {
         setQuickPurchase,
         orderResponse,
         setOrderResponse,
-        cartItems,
-        setCartItems,
       }}
     >
       {children}

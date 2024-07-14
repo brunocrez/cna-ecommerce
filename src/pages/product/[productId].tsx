@@ -37,6 +37,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { Toaster } from '@/components/ui/toaster'
 import { Spinner } from '@/components/spinner'
 import { Routes } from '@/utils/routes'
+import { useCart } from '@/contexts/CartContext'
 
 export default function ProductPage() {
   const router = useRouter()
@@ -45,14 +46,9 @@ export default function ProductPage() {
   const { data: comments } = useComments(productId, !!productId)
 
   const { user } = useAuth()
-  const {
-    zipCode,
-    zipError,
-    setZipError,
-    deliveryOption,
-    setQuickPurchase,
-    setCartItems,
-  } = useCheckout()
+  const { setCartItems } = useCart()
+  const { zipCode, zipError, setZipError, deliveryOption, setQuickPurchase } =
+    useCheckout()
   const {
     triggerMutation,
     isSuccess,

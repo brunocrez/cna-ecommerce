@@ -12,8 +12,6 @@ export const useUpdateCartItem = () => {
     mutationKey: [`updateCartItem`],
     mutationFn: (payload: UpdateCartItemRequestType) => updateCartItem(payload),
     onMutate: async (payload: UpdateCartItemRequestType) => {
-      await queryClient.cancelQueries({ queryKey: ['getCartItems'] })
-
       const previousCart = queryClient.getQueryData<GetCartItemResponseType>([
         'getCartItems',
       ])

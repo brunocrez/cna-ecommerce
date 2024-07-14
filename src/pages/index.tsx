@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Inter } from 'next/font/google'
 import { Header } from '@/components/header'
 import {
@@ -9,16 +10,15 @@ import {
 import { Footer } from '@/components/footer'
 import { HomeSection } from '@/components/home-section'
 import { ProductGroups } from '@/utils/productGroups'
-import { useCheckout } from '@/contexts/CheckoutContext'
 import { useCartItems } from '@/hooks/useCartItems'
 import { useAuth } from '@/contexts/AuthContext'
-import { useEffect } from 'react'
+import { useCart } from '@/contexts/CartContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const { user } = useAuth()
-  const { setCartItems } = useCheckout()
+  const { setCartItems } = useCart()
   const { data } = useCartItems(user.userId, !!user?.name)
 
   useEffect(() => {

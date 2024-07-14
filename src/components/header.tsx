@@ -12,12 +12,13 @@ import { Menu } from './menu'
 import { Container } from './container'
 import { Overlay } from './overlay'
 import { Routes } from '@/utils/routes'
-import { useCheckout } from '@/contexts/CheckoutContext'
+import { useCart } from '@/contexts/CartContext'
 
 export function Header() {
   const { push } = useRouter()
-  const { cartItems } = useCheckout()
+  const { cartItems } = useCart()
   const [isVisible, setIsVisible] = useState(false)
+  const [quantity, setQuantity] = useState(0)
   const menuRef = useRef<HTMLDivElement>(null)
 
   const handleClickMenu = () => {
@@ -44,6 +45,12 @@ export function Header() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [isVisible])
+
+  useEffect(() => {
+    if (cartItems) {
+      setQuantity(cartItems.totalItems)
+    }
+  }, [cartItems])
 
   return (
     <>
@@ -81,11 +88,9 @@ export function Header() {
               <HeartIcon className="size-8 cursor-pointer" />
               <div className="relative" onClick={() => push(Routes.CART)}>
                 <ShoppingBagIcon className="size-8 cursor-pointer" />
-                {cartItems && cartItems.totalItems > 0 && (
+                {quantity > 0 && (
                   <div className="absolute -right-1 -bottom-2 bg-indigo-800 rounded-full w-5 h-5 flex items-center justify-center cursor-pointer">
-                    <span className="text-xs text-white">
-                      {cartItems?.totalItems}
-                    </span>
+                    <span className="text-xs text-white">{quantity}</span>
                   </div>
                 )}
               </div>
@@ -120,11 +125,9 @@ export function Header() {
                 className="size-8 cursor-pointer"
                 onClick={() => push(Routes.CART)}
               />
-              {cartItems && cartItems.totalItems > 0 && (
+              {quantity > 0 && (
                 <div className="absolute -right-1 -bottom-2 bg-indigo-800 rounded-full w-5 h-5 flex items-center justify-center">
-                  <span className="text-xs text-white">
-                    {cartItems?.totalItems}
-                  </span>
+                  <span className="text-xs text-white">{quantity}</span>
                 </div>
               )}
             </div>
@@ -156,11 +159,9 @@ export function Header() {
             className="size-8 text-gray-300 cursor-pointer"
             onClick={() => push(Routes.CART)}
           />
-          {cartItems && cartItems.totalItems > 0 && (
+          {quantity > 0 && (
             <div className="absolute -right-1 -bottom-2 bg-indigo-800 rounded-full w-5 h-5 flex items-center justify-center">
-              <span className="text-xs text-white">
-                {cartItems?.totalItems}
-              </span>
+              <span className="text-xs text-white">{quantity}</span>
             </div>
           )}
         </div>
