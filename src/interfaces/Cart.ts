@@ -20,6 +20,8 @@ export type GetCartItemResponseType = {
   items: CartItems[]
   totalItems: number
   totalPrice: number
+  totalFreight: number
+  total: number
 }
 
 export type UpdateCartItemResponseType = Omit<CartItems, 'product'>

@@ -62,6 +62,8 @@ export default function ProductPage() {
       return setZipError('Selecione uma opção de frete para continuar!')
     }
 
+    triggerMutation({ productId, userId: user.userId, quantity: 1 })
+
     setQuickPurchase({
       user,
       items: [{ productId, quantity: 1, freight: deliveryOption }],

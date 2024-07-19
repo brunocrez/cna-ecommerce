@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { CartLoader } from '@/components/cart-loader'
 import { Container } from '@/components/container'
 import { CounterInput } from '@/components/counter-input'
@@ -6,8 +7,6 @@ import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
 import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Toaster } from '@/components/ui/toaster'
 import { useToast } from '@/components/ui/use-toast'
 import { useAuth } from '@/contexts/AuthContext'
@@ -15,14 +14,10 @@ import { useCartItems } from '@/hooks/useCartItems'
 import { useDeleteCartItem } from '@/hooks/useDeleteCartItem'
 import { useUpdateCartItem } from '@/hooks/useUpdateCartItem'
 import { formatCurrency } from '@/utils/formatCurrency'
-import {
-  DocumentTextIcon,
-  ExclamationCircleIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline'
+import { ExclamationCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useCart } from '@/contexts/CartContext'
-import { useRouter } from 'next/router'
 import { Routes } from '@/utils/routes'
+import { SummaryCart } from '@/components/summary-cart'
 
 export default function CartPage() {
   const { push } = useRouter()
@@ -171,68 +166,21 @@ export default function CartPage() {
                 </div>
 
                 <div className="hidden lg:flex flex-col gap-4 w-full min-w-96 max-w-96">
-                  <div className="bg-slate-700 p-6 rounded-md text-white">
-                    <div className="flex items-center text-gray-300 gap-2 mb-6">
-                      <DocumentTextIcon className="size-6" />
-                      {showSkeleton ? (
-                        <Skeleton className="h-7 w-full max-w-[160px]" />
-                      ) : (
-                        <h2 className="font-bold text-xl">
-                          Resumo ({cardTitle})
-                        </h2>
-                      )}
-                    </div>
-                    <Separator className="bg-slate-600 my-4" />
-                    <div className="flex justify-between">
-                      <span>Subtotal</span>
-                      {showSkeleton ? (
-                        <Skeleton className="w-24 h-6" />
-                      ) : (
-                        <span className="text-lg font-bold text-green-600">
-                          {cartItems && formatCurrency(cartItems.totalPrice)}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <Button
-                    onClick={() => {}}
-                    disabled={showSkeleton}
-                    size="lg"
-                    className="bg-green-600 font-bold text-lg"
-                  >
-                    Continuar Compra
-                  </Button>
+                  <SummaryCart
+                    cardTitle={cardTitle}
+                    cartItems={cartItems}
+                    isLoading={showSkeleton}
+                  />
                 </div>
               </div>
 
-              <div className="bg-slate-700 rounded-md p-4 text-white lg:hidden">
-                <div className="flex items-center text-gray-300 gap-2 mb-6">
-                  <DocumentTextIcon className="size-6" />
-                  {showSkeleton ? (
-                    <Skeleton className="h-7 w-full max-w-[160px]" />
-                  ) : (
-                    <h2 className="font-bold text-xl">Resumo ({cardTitle})</h2>
-                  )}
-                </div>
-
-                <Separator className="bg-slate-600 my-4" />
-
-                <div className="flex items-center justify-between text-gray-200">
-                  <h2>Subtotal</h2>
-                  {showSkeleton ? (
-                    <Skeleton className="w-24 h-6" />
-                  ) : (
-                    <span className="text-green-600 font-bold text-lg">
-                      {cartItems && formatCurrency(cartItems.totalPrice)}
-                    </span>
-                  )}
-                </div>
+              <div className="lg:hidden flex flex-col gap-4 w-full">
+                <SummaryCart
+                  cardTitle={cardTitle}
+                  cartItems={cartItems}
+                  isLoading={showSkeleton}
+                />
               </div>
-
-              <Button className="mt-6 w-full bg-green-600 lg:hidden">
-                Continuar Compra
-              </Button>
             </>
           )}
         </Container>
