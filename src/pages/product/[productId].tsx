@@ -47,7 +47,7 @@ export default function ProductPage() {
 
   const { user } = useAuth()
   const { setCartItems } = useCart()
-  const { zipCode, zipError, setZipError, deliveryOption, setQuickPurchase } =
+  const { zipCode, zipError, setZipError, deliveryOption, setProductId } =
     useCheckout()
   const {
     triggerMutation,
@@ -57,23 +57,18 @@ export default function ProductPage() {
   } = useCreateCartItem()
   const { toast } = useToast()
 
-  const handleClickPurchase = () => {
+  const handleClickPurchase = async () => {
     if (!zipCode || zipError || !deliveryOption) {
       return setZipError('Selecione uma opção de frete para continuar!')
     }
 
-    triggerMutation({ productId, userId: user.userId, quantity: 1 })
-
-    setQuickPurchase({
-      user,
-      items: [{ productId, quantity: 1, freight: deliveryOption }],
-    })
-
+    await triggerMutation({ productId, userId: user.userId, quantity: 1 })
+    setProductId(productId)
     router.push(Routes.CHECKOUT)
   }
 
-  const handleClickAddItem = () => {
-    triggerMutation({ productId, userId: user.userId, quantity: 1 })
+  const handleClickAddItem = async () => {
+    await triggerMutation({ productId, userId: user.userId, quantity: 1 })
   }
 
   useEffect(() => {
@@ -86,7 +81,7 @@ export default function ProductPage() {
 
       setCartItems(cartItems)
     }
-  }, [isSuccess])
+  }, [isSuccess, productId])
 
   return (
     <div className="bg-slate-800">

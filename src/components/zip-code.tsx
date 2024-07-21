@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
@@ -38,6 +38,12 @@ export function ZipCode({ productId }: ZipCodeProps) {
     setDeliveryOption(option)
     setZipError('')
   }
+
+  useEffect(() => {
+    return () => {
+      setDeliveryOption(null)
+    }
+  }, [])
 
   return (
     <div className="flex flex-col">

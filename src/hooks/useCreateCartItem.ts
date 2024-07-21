@@ -8,8 +8,8 @@ export const useCreateCartItem = () => {
     mutationFn: (payload: CreateCartItemRequestType) => createCartItem(payload),
   })
 
-  const triggerMutation = (payload: CreateCartItemRequestType) => {
-    mutation.mutate(payload)
+  const triggerMutation = async (payload: CreateCartItemRequestType) => {
+    await mutation.mutateAsync(payload)
   }
 
   return { ...mutation, triggerMutation }
