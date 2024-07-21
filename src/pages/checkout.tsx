@@ -27,11 +27,11 @@ import { Routes } from '@/utils/routes'
 
 export default function CheckoutPage() {
   const { push } = useRouter()
-  const { productId, setOrderResponse, deliveryOption } = useCheckout()
+  const { product, setOrderResponse, deliveryOption } = useCheckout()
   const { user } = useAuth()
 
   const createOrder = {
-    productId: productId ?? '',
+    productId: product?.id ?? '',
     quantity: 1,
     freight: deliveryOption?.price!,
   }
@@ -40,7 +40,7 @@ export default function CheckoutPage() {
     user ?? ({} as LoggedUserType),
     [createOrder] ?? [],
     user.addresses[0].id ?? '',
-    !!user.userId && !!productId,
+    !!user.userId && !!product?.id,
   )
 
   const { triggerMutation, data: orderResponse, isSuccess } = useUpdateOrder()

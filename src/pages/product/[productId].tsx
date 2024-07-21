@@ -29,7 +29,6 @@ import { useProduct } from '@/hooks/useProduct'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useComments } from '@/hooks/useComments'
-import { ZipCode } from '@/components/zip-code'
 import { useCheckout } from '@/contexts/CheckoutContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCreateCartItem } from '@/hooks/useCreateCartItem'
@@ -47,8 +46,7 @@ export default function ProductPage() {
 
   const { user } = useAuth()
   const { setCartItems } = useCart()
-  const { zipCode, zipError, setZipError, deliveryOption, setProductId } =
-    useCheckout()
+  const { setProduct } = useCheckout()
   const {
     triggerMutation,
     isSuccess,
@@ -58,13 +56,9 @@ export default function ProductPage() {
   const { toast } = useToast()
 
   const handleClickPurchase = async () => {
-    if (!zipCode || zipError || !deliveryOption) {
-      return setZipError('Selecione uma opção de frete para continuar!')
-    }
-
     await triggerMutation({ productId, userId: user.userId, quantity: 1 })
-    setProductId(productId)
-    router.push(Routes.CHECKOUT)
+    setProduct(data)
+    router.push(Routes.PRE_CHECKOUT)
   }
 
   const handleClickAddItem = async () => {
@@ -222,7 +216,6 @@ export default function ProductPage() {
               )}
             </div>
             <div className="my-6">
-              <ZipCode productId={data?.id || ''} />
               <div className="w-full flex flex-col gap-3 mt-6 md:flex-row md:justify-center lg:hidden">
                 <Button
                   className="flex gap-3 bg-indigo-800 w-full h-12"
